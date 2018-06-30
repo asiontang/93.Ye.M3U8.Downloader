@@ -49,6 +49,12 @@ namespace HLS.Download.UI
             var TAG = "主程序";
             WriteLog(TAG, "启动中");
 
+            var settings = new Aria2cSettings();
+            settings.Aria2Path = Path.Combine(Environment.CurrentDirectory, "Aria2\\aria2c.exe");
+            settings.Aria2Host = "localhost";
+            settings.Aria2Port = 6800;
+            Aria2cRuntime.Settings = settings;
+
             btnStartAria2.Enabled = !Aria2cRuntime.IsLoaded;
             WriteLog(TAG, "检测到 Aria2 状态为" + (!btnStartAria2.Enabled ? "【已启动】" : "[未启动]"));
 
@@ -63,11 +69,7 @@ namespace HLS.Download.UI
             WriteLog(TAG, "执行中");
             try
             {
-                var settings = new Aria2cSettings();
-                settings.Aria2Path = Path.Combine(Environment.CurrentDirectory, "Aria2\\aria2c.exe");
-                settings.Aria2Host = "localhost";
-                settings.Aria2Port = 6800;
-                Aria2cRuntime.Load(settings);
+                Aria2cRuntime.Start();
 
                 WriteLog(TAG, "执行完毕。");
 
@@ -104,16 +106,12 @@ namespace HLS.Download.UI
                 Aria2cRuntime.ShutDown();
 
                 //进程遍历所有相同名字进程。
-                int successCount = 0;
                 var plist = Process.GetProcessesByName("aria2c");
                 foreach (var p in plist)
                     if (!p.HasExited)
-                    {
                         p.Kill();
-                        successCount++;
-                    }
 
-                WriteLog(TAG, string.Format("执行完毕:尝试杀掉{0}个进程。", successCount + (btnStartAria2.Enabled ? 0 : 1)));
+                WriteLog(TAG, string.Format("执行完毕:尝试杀掉{0}个进程。", plist.Length));
             }
             catch (Exception ex)
             {

@@ -115,10 +115,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DebugLog\DebugLog.csproj">
-      <Project>{1F8D0987-7BE8-47DC-BFAD-9CA61F2F3D9D}</Project>
-      <Name>DebugLog</Name>
-    </ProjectReference>
     <ProjectReference Include="..\XmlRpcNet\XmlRpcNet.csproj">
       <Project>{1B4B0A58-0AFB-4090-91DD-18912CC7DE65}</Project>
       <Name>XmlRpcNet</Name>

@@ -103,17 +103,39 @@ namespace FlyVR.Aria2
         #endregion
 
         #region 公共方法
+        private static Aria2cSettings _Aria2cSettings;
+        public static Aria2cSettings Settings
+        {
+            get
+            {
+                return _Aria2cSettings ?? new Aria2cSettings();
+            }
+            set
+            {
+                _Aria2cSettings = value;
+                SetAria2cHost(value.Aria2Host, value.Aria2Port);
+            }
+        }
+
         /// <summary>
         /// 启动服务进程
         /// </summary>
         /// <returns></returns>
-        public static void Load(Aria2cSettings settings)
+        public static void Start(Aria2cSettings settings)
         {
-            SetAria2cHost(settings.Aria2Host, settings.Aria2Port);
+            Settings = settings;
+            Start();
+        }
 
-            if (/*!IsLoaded && 外界已经做了检查所以不再检测一遍提升启动速度。*/File.Exists(settings.Aria2Path))
+        /// <summary>
+        /// 启动服务进程
+        /// </summary>
+        /// <returns></returns>
+        public static void Start()
+        {
+            if (/*!IsLoaded && 外界已经做了检查所以不再检测一遍提升启动速度。*/File.Exists(Settings.Aria2Path))
             {
-                StartProcess(settings.Aria2Path, settings.Aria2Args);
+                StartProcess(Settings.Aria2Path, Settings.Aria2Args);
             }
         }
 
