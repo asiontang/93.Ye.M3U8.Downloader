@@ -157,7 +157,7 @@ namespace FlyVR.Aria2
 
                 if (string.IsNullOrWhiteSpace(args))
                 {
-                    if (File.Exists(config))
+                    if (File.Exists(Path.Combine(aria2Dir, config)))
                     {
                         args = " --conf-path=" + config;
                     }
@@ -178,7 +178,8 @@ namespace FlyVR.Aria2
             }
             catch (Exception ex)
             {
-               // Logger.Debug(ex);
+                throw ex;
+                // Logger.Debug(ex);
             }
         }
 
