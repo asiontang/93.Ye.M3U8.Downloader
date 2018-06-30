@@ -36,6 +36,7 @@
             this.btnKillAllAria2 = new System.Windows.Forms.Button();
             this.btnStartAria2 = new System.Windows.Forms.Button();
             this.btnOpenAria2WebUI = new System.Windows.Forms.Button();
+            this.btnOpenDownloadDir = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -96,6 +97,7 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.btnOpenDownloadDir);
             this.groupBox2.Controls.Add(this.btnKillAllAria2);
             this.groupBox2.Controls.Add(this.btnStartAria2);
             this.groupBox2.Controls.Add(this.btnOpenAria2WebUI);
@@ -128,13 +130,23 @@
             // 
             // btnOpenAria2WebUI
             // 
-            this.btnOpenAria2WebUI.Location = new System.Drawing.Point(179, 20);
+            this.btnOpenAria2WebUI.Location = new System.Drawing.Point(108, 20);
             this.btnOpenAria2WebUI.Name = "btnOpenAria2WebUI";
             this.btnOpenAria2WebUI.Size = new System.Drawing.Size(96, 36);
             this.btnOpenAria2WebUI.TabIndex = 1;
             this.btnOpenAria2WebUI.Text = "打开WebUI";
             this.btnOpenAria2WebUI.UseVisualStyleBackColor = true;
             this.btnOpenAria2WebUI.Click += new System.EventHandler(this.btnOpenAria2WebUI_Click);
+            // 
+            // btnOpenDownloadDir
+            // 
+            this.btnOpenDownloadDir.Location = new System.Drawing.Point(210, 20);
+            this.btnOpenDownloadDir.Name = "btnOpenDownloadDir";
+            this.btnOpenDownloadDir.Size = new System.Drawing.Size(96, 36);
+            this.btnOpenDownloadDir.TabIndex = 3;
+            this.btnOpenDownloadDir.Text = "打开下载目录";
+            this.btnOpenDownloadDir.UseVisualStyleBackColor = true;
+            this.btnOpenDownloadDir.Click += new System.EventHandler(this.btnOpenDownloadDir_Click);
             // 
             // MainForm
             // 
@@ -164,6 +176,7 @@
         private System.Windows.Forms.Button btnOpenAria2WebUI;
         private System.Windows.Forms.Button btnStartAria2;
         private System.Windows.Forms.Button btnKillAllAria2;
+        private System.Windows.Forms.Button btnOpenDownloadDir;
     }
 }
 

@@ -9,6 +9,8 @@ namespace HLS.Download.UI
 {
     public partial class MainForm : Form
     {
+        private Aria2c mAria2c;
+
         public MainForm()
         {
             InitializeComponent();
@@ -26,16 +28,21 @@ namespace HLS.Download.UI
 
         private void btnDoIt_Click(object sender, EventArgs e)
         {
+            if (mAria2c == null)
+                btnStartAria2_Click(btnStartAria2, null);
+
             try
             {
                 var urls = getDownloadUrls();
                 foreach (var url in urls)
                 {
-                    Debug.WriteLine("url：");
-                    Debug.WriteLine(url);
-                    var task = HLS.Download.Models.HLSStream.Open(url);
-                    Debug.WriteLine("Result：");
-                    Debug.WriteLine(task.Result);
+                    var gid = mAria2c.AddUri(url);
+
+                    //Debug.WriteLine("url：");
+                    //Debug.WriteLine(url);
+                    //var task = HLS.Download.Models.HLSStream.Open(url);
+                    //Debug.WriteLine("Result：");
+                    //Debug.WriteLine(task.Result);
 
                 }
             }
@@ -76,6 +83,8 @@ namespace HLS.Download.UI
                 WriteLog(TAG, "执行结果：检测中");
                 btnStartAria2.Enabled = !Aria2cRuntime.IsLoaded;
                 WriteLog(TAG, "执行结果：" + (!btnStartAria2.Enabled ? "【成功】" : "[失败]"));
+
+                mAria2c = new Aria2c();
             }
             catch (Exception ex)
             {
@@ -153,6 +162,13 @@ namespace HLS.Download.UI
             txbLog.AppendText("：");
             txbLog.AppendText(info);
             txbLog.AppendText(Environment.NewLine);
+        }
+
+        private void btnOpenDownloadDir_Click(object sender, EventArgs e)
+        {
+            var downloadPath = Path.Combine(Environment.CurrentDirectory, "Download");
+            Directory.CreateDirectory(downloadPath);
+            Process.Start(downloadPath);
         }
     }
 }
