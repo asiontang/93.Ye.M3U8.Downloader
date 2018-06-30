@@ -61,6 +61,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Content Include="Aria2\aria2c.session">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Aria2\aria2c.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
