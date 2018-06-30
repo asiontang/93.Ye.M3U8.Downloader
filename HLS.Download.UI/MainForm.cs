@@ -104,12 +104,16 @@ namespace HLS.Download.UI
                 Aria2cRuntime.ShutDown();
 
                 //进程遍历所有相同名字进程。
+                int successCount = 0;
                 var plist = Process.GetProcessesByName("aria2c");
                 foreach (var p in plist)
                     if (!p.HasExited)
+                    {
                         p.Kill();
+                        successCount++;
+                    }
 
-                WriteLog(TAG, string.Format("执行完毕:尝试杀掉{0}个进程。", plist.Length + (btnStartAria2.Enabled ? 0 : 1)));
+                WriteLog(TAG, string.Format("执行完毕:尝试杀掉{0}个进程。", successCount + (btnStartAria2.Enabled ? 0 : 1)));
             }
             catch (Exception ex)
             {

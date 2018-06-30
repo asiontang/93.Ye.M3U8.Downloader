@@ -111,7 +111,7 @@ namespace FlyVR.Aria2
         {
             SetAria2cHost(settings.Aria2Host, settings.Aria2Port);
 
-            if (!IsLoaded && File.Exists(settings.Aria2Path))
+            if (/*!IsLoaded && 外界已经做了检查所以不再检测一遍提升启动速度。*/File.Exists(settings.Aria2Path))
             {
                 StartProcess(settings.Aria2Path, settings.Aria2Args);
             }
