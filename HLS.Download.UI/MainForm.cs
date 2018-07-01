@@ -70,8 +70,10 @@ namespace HLS.Download.UI
             settings.Aria2Port = 6800;
             Aria2cRuntime.Settings = settings;
 
-            btnStartAria2.Enabled = !Aria2cRuntime.IsLoaded;
-            WriteLog(TAG, "检测到 Aria2 状态为" + (!btnStartAria2.Enabled ? "【已启动】" : "[未启动]"));
+            //不再在启动时检测状态，发现即使检测到已经启动，但是后续的别的模块还是依赖于点击界面的启动按钮才有效。
+            //因此没有任何检测的意义了。因为都必须要点击至少一次“启动”按钮才能继续使用别的功能。
+            //NO:btnStartAria2.Enabled = !Aria2cRuntime.IsLoaded;
+            //NO:WriteLog(TAG, "检测到 Aria2 状态为" + (!btnStartAria2.Enabled ? "【已启动】" : "[未启动]"));
 
             WriteLog(TAG, "启动完毕。");
         }
@@ -92,10 +94,14 @@ namespace HLS.Download.UI
                 btnStartAria2.Enabled = !Aria2cRuntime.IsLoaded;
                 WriteLog(TAG, "执行结果：" + (!btnStartAria2.Enabled ? "【成功】" : "[失败]"));
 
-                var downloadPath = Path.Combine(Environment.CurrentDirectory, "Download");
-                Directory.CreateDirectory(downloadPath);
-                Aria2cRuntime.DownLoadDirectory = downloadPath;
-                WriteLog(TAG, "设置全局下载目录=" + downloadPath);
+                {
+                    var downloadPath = Path.Combine(Environment.CurrentDirectory, "Download");
+                    if (!String.IsNullOrWhiteSpace(folderBrowserDialog1.SelectedPath))
+                        downloadPath = folderBrowserDialog1.SelectedPath;
+                    Directory.CreateDirectory(downloadPath);
+                    Aria2cRuntime.DownLoadDirectory = downloadPath;
+                    WriteLog(TAG, "设置全局下载目录=" + downloadPath);
+                }
 
                 mAria2c = new Aria2c();
                 mAria2c.OnFinish += delegate (object obj, Aria2cTaskEvent taskEvent)
