@@ -1,5 +1,6 @@
 ﻿using FlyVR.Aria2;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -26,6 +27,8 @@ namespace HLS.Download.UI
             btnDoIt.Text = string.Format("下载\n({0})", getDownloadUrls().Length);
         }
 
+        private Dictionary<String, String> mUrlAndNameMap = new Dictionary<string, string>();
+        private Dictionary<String, String> mPidAndUrlMap = new Dictionary<string, string>();
         private void btnDoIt_Click(object sender, EventArgs e)
         {
             ((Button)sender).Enabled = false;
@@ -38,12 +41,26 @@ namespace HLS.Download.UI
                 if (mAria2c == null)
                     btnStartAria2_Click(btnStartAria2, null);
 
-                foreach (var url in getDownloadUrls())
+                mUrlAndNameMap.Clear();
+                mPidAndUrlMap.Clear();
+
+                List<String> urls = new List<string>();
+                foreach (var s in getDownloadUrls())
                 {
-                    WriteLog(TAG, url);
-                    var gid = mAria2c.AddUri(url);
-                    WriteLog(TAG, string.Format("任务ID={0}", gid));
+                    var urlAndName = s.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    if (urlAndName.Length != 2)
+                    {
+                        WriteLog(TAG, string.Format("下载格式有误={1}", s));
+                        continue;
+                    }
+                    var name = urlAndName[0];
+                    var url = urlAndName[1];
+                    mUrlAndNameMap.Add(url, name);
+                    WriteLog(TAG, string.Format("文件名={0} 地址={1}", name, url));
+                    urls.Add(url);
                 }
+                foreach (var url in urls)
+                    mPidAndUrlMap.Add(mAria2c.AddUri(url), url);
             }
             catch (Exception ex)
             {
