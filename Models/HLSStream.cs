@@ -1,5 +1,6 @@
 ﻿namespace HLS.Download.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Threading.Tasks;
@@ -14,6 +15,7 @@
         public string Version { get; private set; }
         public string MediaSequence { get; private set; }
         public HLSStreamPart[] Parts { get; private set; }
+        public HLSPlaylist[] Playlist { get; private set; }
 
         /// <summary>
         /// Parse a HLSStream object from a string
@@ -22,39 +24,98 @@
         /// <returns>Returns a parsed HLSStream object</returns>
         private static HLSStream ParseFromString(string m3u8)
         {
-            string[] lines = m3u8.Split('\n');
+            string[] lines = m3u8.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             HLSStream STREAM = new HLSStream();
             List<HLSStreamPart> PARTS = new List<HLSStreamPart>();
+            List<HLSPlaylist> Playlist = new List<HLSPlaylist>();
 
-            for(int i = 0; i < lines.Length; i++)
+            for (int i = 0; i < lines.Length; i++)
             {
                 string line = lines[i];
-
-                if (line.Contains("TARGETDURATION"))
-                    STREAM.TargetDuration = line.Split(':')[1];
-
-                if (line.Contains("ALLOW-CACHE"))
-                    STREAM.AllowCache = line.Split(':')[1];
-
-                if (line.Contains("PLAYLIST-TYPE"))
-                    STREAM.PlaylistType = line.Split(':')[1];
-
-                if (line.Contains("KEY"))
-                    STREAM.Key = new HLSEncryptionKey(line.Split(':')[1]);
-
-                if (line.Contains("VERSION"))
-                    STREAM.Version = line.Split(':')[1];
-
-                if (line.Contains("MEDIA-SEQUENCE"))
-                    STREAM.MediaSequence = line.Split(':')[1];
 
                 if (line.Contains("EXTINF"))
                 {
                     PARTS.Add(new HLSStreamPart(line, lines[i + 1]));
                     i = i + 2;
+                    continue;
+                }
+                if (line.Contains("EXTM3U"))
+                    continue;
+                if (line.Contains("TARGETDURATION"))
+                {
+                    STREAM.TargetDuration = line.Split(':')[1];
+                    continue;
+                }
+                if (line.Contains("ALLOW-CACHE"))
+                {
+                    STREAM.AllowCache = line.Split(':')[1];
+                    continue;
+                }
+                if (line.Contains("PLAYLIST-TYPE"))
+                {
+                    STREAM.PlaylistType = line.Split(':')[1];
+                    continue;
+                }
+                if (line.Contains("KEY"))
+                {
+                    STREAM.Key = new HLSEncryptionKey(line.Split(':')[1]);
+                    continue;
+                }
+                if (line.Contains("VERSION"))
+                {
+                    STREAM.Version = line.Split(':')[1];
+                    continue;
+                }
+                if (line.Contains("MEDIA-SEQUENCE"))
+                {
+                    STREAM.MediaSequence = line.Split(':')[1];
+                    continue;
+                }
+                if (line.Contains("EXT-X-STREAM-INF"))
+                {
+                    #region 多码率适配流
+                    var tmpPlaylist = new HLSPlaylist();
+
+                    //#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=800000,RESOLUTION=720x406,CODECS="avc1.4d401f,mp4a.40.2"
+                    var tmpItems = line.Split("\"".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    var codecsValue = "";
+                    var tmpLine = line;
+                    if (tmpItems.Length == 2)
+                    {
+                        tmpLine = tmpItems[0];
+                        codecsValue = tmpItems[1];
+                    }
+                    var items = tmpLine.Split("#:,".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    for (var si = 1/*跳过EXT-X-STREAM-INF*/; si < items.Length; si++)
+                    {
+                        var keyValue = items[si].Split("=".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                        switch (keyValue[0])
+                        {
+                            case "BANDWIDTH":
+                                tmpPlaylist.BANDWIDTH = keyValue[1];
+                                break;
+                            case "CODECS":
+                                tmpPlaylist.CODECS = codecsValue;// keyValue[1];
+                                break;
+                            case "PROGRAM-ID":
+                                tmpPlaylist.PROGRAM_ID = keyValue[1];
+                                break;
+                            case "RESOLUTION":
+                                tmpPlaylist.RESOLUTION = keyValue[1];
+                                break;
+                        }
+                    }
+
+                    //
+                    tmpPlaylist.URI = lines[i + 1];
+                    i = i + 2;
+
+                    Playlist.Add(tmpPlaylist);
+                    #endregion
+                    continue;
                 }
             }
-
+            STREAM.Playlist = Playlist.ToArray();
             STREAM.Parts = PARTS.ToArray();
 
             return STREAM;

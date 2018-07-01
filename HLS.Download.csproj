@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\HLSEncryptionKey.cs" />
+    <Compile Include="Models\HLSPlaylist.cs" />
     <Compile Include="Models\HLSStream.cs" />
     <Compile Include="Models\HLSStreamEntry.cs" />
     <Compile Include="Models\HLSStreamPart.cs" />
