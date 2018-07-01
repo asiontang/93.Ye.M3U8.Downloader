@@ -220,6 +220,8 @@ namespace HLS.Download.UI
             WriteLog(TAG, "执行中");
             try
             {
+                mAria2c?.Shutdown();
+                mAria2c?.Dispose();
                 mAria2c = null;
                 Aria2cRuntime.ShutDown();
 
