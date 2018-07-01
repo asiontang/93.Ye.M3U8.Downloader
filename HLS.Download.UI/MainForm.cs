@@ -134,21 +134,29 @@ namespace HLS.Download.UI
                     , taskEvent.Task.ErrorMessage));
                 return;
             }
-            WriteLog(TAG2, uri);
-            WriteLog(TAG2, string.Format("OnFinish={0}; 下载完毕！", taskEvent.Gid));
-
             var extension = Path.GetExtension(uri).ToLower();
             switch (extension)
             {
                 case ".m3u8":
-                    //当序列下载完成时。
-                    OnDownloadCompletedM3U8(taskEvent);
+                    {
+                        WriteLog(TAG2, uri);
+                        WriteLog(TAG2, string.Format("OnFinish={0}; 下载完毕！", taskEvent.Gid));
+
+                        //当播放序列文件下载完成时。
+                        OnDownloadCompletedM3U8(taskEvent);
+                    }
                     break;
                 case ".ts":
-                    //当序列下载完成时。
-                    OnDownloadCompletedTS(taskEvent);
+                    {
+                        //当视频流切片下载完成时。
+                        OnDownloadCompletedTS(taskEvent);
+                    }
                     break;
                 default:
+                    {
+                        WriteLog(TAG2, "不受支持的后缀：" + extension);
+                        WriteLog(TAG2, uri);
+                    }
                     break;
             }
         }
@@ -157,7 +165,7 @@ namespace HLS.Download.UI
         {
             try
             {
-                var file = taskEvent.Task.Files[0];
+                //var file = taskEvent.Task.Files[0];
             }
             catch (Exception ex)
             {
