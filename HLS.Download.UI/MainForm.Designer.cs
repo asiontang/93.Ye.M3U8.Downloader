@@ -28,30 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.btnDoIt = new System.Windows.Forms.Button();
             this.txbUrls = new System.Windows.Forms.TextBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.txbCustomBandwidth = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.rdbSelectBandWidthCustom = new System.Windows.Forms.RadioButton();
+            this.rdbSelectBandWidthMin = new System.Windows.Forms.RadioButton();
+            this.rdbSelectBandWidthMax = new System.Windows.Forms.RadioButton();
             this.txbLog = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnSetDownloadLocation = new System.Windows.Forms.Button();
             this.btnOpenDownloadDir = new System.Windows.Forms.Button();
             this.btnKillAllAria2 = new System.Windows.Forms.Button();
             this.btnStartAria2 = new System.Windows.Forms.Button();
             this.btnOpenAria2WebUI = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.label3 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.btnSetDownloadLocation = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -59,21 +63,35 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.textBox2);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.radioButton3);
-            this.groupBox1.Controls.Add(this.radioButton2);
-            this.groupBox1.Controls.Add(this.radioButton1);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.btnDoIt);
             this.groupBox1.Controls.Add(this.txbUrls);
-            this.groupBox1.Location = new System.Drawing.Point(12, 75);
+            this.groupBox1.Controls.Add(this.panel1);
+            this.groupBox1.Location = new System.Drawing.Point(12, 76);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(516, 142);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "下载控制台:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(157, 62);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(203, 12);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "示例:ABC视频 http://a.cn/c/d.m3u8";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(4, 62);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(131, 12);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "格式:文件名 空格 网址\r\n";
             // 
             // btnDoIt
             // 
@@ -102,6 +120,79 @@
     "om/20180303/hD8sDBV1/index.m3u8";
             this.txbUrls.TextChanged += new System.EventHandler(this.txbUrls_TextChanged);
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.txbCustomBandwidth);
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.rdbSelectBandWidthCustom);
+            this.panel1.Controls.Add(this.rdbSelectBandWidthMin);
+            this.panel1.Controls.Add(this.rdbSelectBandWidthMax);
+            this.panel1.Location = new System.Drawing.Point(6, 19);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(510, 30);
+            this.panel1.TabIndex = 6;
+            // 
+            // txbCustomBandwidth
+            // 
+            this.txbCustomBandwidth.Location = new System.Drawing.Point(275, 3);
+            this.txbCustomBandwidth.Name = "txbCustomBandwidth";
+            this.txbCustomBandwidth.Size = new System.Drawing.Size(229, 21);
+            this.txbCustomBandwidth.TabIndex = 6;
+            this.txbCustomBandwidth.Text = "000000";
+            this.toolTip1.SetToolTip(this.txbCustomBandwidth, "当只有一种码率时，此设置会被忽略。");
+            this.txbCustomBandwidth.WordWrap = false;
+            this.txbCustomBandwidth.TextChanged += new System.EventHandler(this.txbCustomBandwidth_TextChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 6);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(95, 12);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "多码率选择策略:";
+            this.toolTip1.SetToolTip(this.label3, "当只有一种码率时，此设置会被忽略。");
+            // 
+            // rdbSelectBandWidthCustom
+            // 
+            this.rdbSelectBandWidthCustom.AutoSize = true;
+            this.rdbSelectBandWidthCustom.Checked = true;
+            this.rdbSelectBandWidthCustom.Location = new System.Drawing.Point(210, 6);
+            this.rdbSelectBandWidthCustom.Name = "rdbSelectBandWidthCustom";
+            this.rdbSelectBandWidthCustom.Size = new System.Drawing.Size(59, 16);
+            this.rdbSelectBandWidthCustom.TabIndex = 7;
+            this.rdbSelectBandWidthCustom.TabStop = true;
+            this.rdbSelectBandWidthCustom.Text = "自定义";
+            this.toolTip1.SetToolTip(this.rdbSelectBandWidthCustom, "当只有一种码率时，此设置会被忽略。");
+            this.rdbSelectBandWidthCustom.UseVisualStyleBackColor = true;
+            this.rdbSelectBandWidthCustom.CheckedChanged += new System.EventHandler(this.rdbSelectBandWidthCustom_CheckedChanged);
+            // 
+            // rdbSelectBandWidthMin
+            // 
+            this.rdbSelectBandWidthMin.AutoSize = true;
+            this.rdbSelectBandWidthMin.Location = new System.Drawing.Point(157, 6);
+            this.rdbSelectBandWidthMin.Name = "rdbSelectBandWidthMin";
+            this.rdbSelectBandWidthMin.Size = new System.Drawing.Size(47, 16);
+            this.rdbSelectBandWidthMin.TabIndex = 8;
+            this.rdbSelectBandWidthMin.TabStop = true;
+            this.rdbSelectBandWidthMin.Text = "最小";
+            this.toolTip1.SetToolTip(this.rdbSelectBandWidthMin, "当只有一种码率时，此设置会被忽略。");
+            this.rdbSelectBandWidthMin.UseVisualStyleBackColor = true;
+            this.rdbSelectBandWidthMin.CheckedChanged += new System.EventHandler(this.rdbSelectBandWidthMin_CheckedChanged);
+            // 
+            // rdbSelectBandWidthMax
+            // 
+            this.rdbSelectBandWidthMax.AutoSize = true;
+            this.rdbSelectBandWidthMax.Location = new System.Drawing.Point(104, 6);
+            this.rdbSelectBandWidthMax.Name = "rdbSelectBandWidthMax";
+            this.rdbSelectBandWidthMax.Size = new System.Drawing.Size(47, 16);
+            this.rdbSelectBandWidthMax.TabIndex = 9;
+            this.rdbSelectBandWidthMax.TabStop = true;
+            this.rdbSelectBandWidthMax.Text = "最大";
+            this.toolTip1.SetToolTip(this.rdbSelectBandWidthMax, "当只有一种码率时，此设置会被忽略。");
+            this.rdbSelectBandWidthMax.UseVisualStyleBackColor = true;
+            this.rdbSelectBandWidthMax.CheckedChanged += new System.EventHandler(this.rdbSelectBandWidthMax_CheckedChanged);
+            // 
             // txbLog
             // 
             this.txbLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -111,7 +202,7 @@
             this.txbLog.Multiline = true;
             this.txbLog.Name = "txbLog";
             this.txbLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txbLog.Size = new System.Drawing.Size(385, 320);
+            this.txbLog.Size = new System.Drawing.Size(385, 312);
             this.txbLog.TabIndex = 1;
             // 
             // groupBox2
@@ -121,12 +212,22 @@
             this.groupBox2.Controls.Add(this.btnKillAllAria2);
             this.groupBox2.Controls.Add(this.btnStartAria2);
             this.groupBox2.Controls.Add(this.btnOpenAria2WebUI);
-            this.groupBox2.Location = new System.Drawing.Point(12, 3);
+            this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(516, 58);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Aria2控制台:";
+            // 
+            // btnSetDownloadLocation
+            // 
+            this.btnSetDownloadLocation.Location = new System.Drawing.Point(312, 16);
+            this.btnSetDownloadLocation.Name = "btnSetDownloadLocation";
+            this.btnSetDownloadLocation.Size = new System.Drawing.Size(96, 36);
+            this.btnSetDownloadLocation.TabIndex = 4;
+            this.btnSetDownloadLocation.Text = "设置下载目录";
+            this.btnSetDownloadLocation.UseVisualStyleBackColor = true;
+            this.btnSetDownloadLocation.Click += new System.EventHandler(this.btnSetDownloadLocation_Click);
             // 
             // btnOpenDownloadDir
             // 
@@ -168,35 +269,27 @@
             this.btnOpenAria2WebUI.UseVisualStyleBackColor = true;
             this.btnOpenAria2WebUI.Click += new System.EventHandler(this.btnOpenAria2WebUI_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 62);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(131, 12);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "格式:文件名 空格 网址\r\n";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(157, 62);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(203, 12);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "示例:ABC视频 http://a.cn/c/d.m3u8";
-            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.button1);
             this.groupBox3.Controls.Add(this.textBox1);
-            this.groupBox3.Location = new System.Drawing.Point(12, 223);
+            this.groupBox3.Location = new System.Drawing.Point(12, 224);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(516, 121);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "合并控制台:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 17);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(257, 72);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "{ffmpeg}\r\n    会自动替换本程序目录下的路径\r\n{列表.m3u8}\r\n    会自动替换为真实的本地切片列表文件路径\r\n{文件名}\r\n    会自动替" +
+    "换为下载时设置的值";
             // 
             // button1
             // 
@@ -225,86 +318,12 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.txbLog);
-            this.groupBox4.Location = new System.Drawing.Point(534, 3);
+            this.groupBox4.Location = new System.Drawing.Point(534, 12);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(399, 341);
+            this.groupBox4.Size = new System.Drawing.Size(399, 333);
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "日志信息:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 17);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(257, 72);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "{ffmpeg}\r\n    会自动替换本程序目录下的路径\r\n{列表.m3u8}\r\n    会自动替换为真实的本地切片列表文件路径\r\n{文件名}\r\n    会自动替" +
-    "换为下载时设置的值";
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(105, 22);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(47, 16);
-            this.radioButton1.TabIndex = 4;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "最大";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(158, 22);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(47, 16);
-            this.radioButton2.TabIndex = 4;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "最小";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(211, 22);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(59, 16);
-            this.radioButton3.TabIndex = 4;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "自定义";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(4, 22);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(95, 12);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "多码率选择策略:";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox2.Location = new System.Drawing.Point(276, 19);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox2.Size = new System.Drawing.Size(226, 21);
-            this.textBox2.TabIndex = 4;
-            this.textBox2.Text = "800000";
-            // 
-            // btnSetDownloadLocation
-            // 
-            this.btnSetDownloadLocation.Location = new System.Drawing.Point(312, 16);
-            this.btnSetDownloadLocation.Name = "btnSetDownloadLocation";
-            this.btnSetDownloadLocation.Size = new System.Drawing.Size(96, 36);
-            this.btnSetDownloadLocation.TabIndex = 4;
-            this.btnSetDownloadLocation.Text = "设置下载目录";
-            this.btnSetDownloadLocation.UseVisualStyleBackColor = true;
-            this.btnSetDownloadLocation.Click += new System.EventHandler(this.btnSetDownloadLocation_Click);
             // 
             // MainForm
             // 
@@ -319,6 +338,8 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -346,13 +367,15 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.Button btnSetDownloadLocation;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox txbCustomBandwidth;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.RadioButton rdbSelectBandWidthCustom;
+        private System.Windows.Forms.RadioButton rdbSelectBandWidthMin;
+        private System.Windows.Forms.RadioButton rdbSelectBandWidthMax;
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿using FlyVR.Aria2;
+using HLS.Download.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,6 +12,9 @@ namespace HLS.Download.UI
     public partial class MainForm : Form
     {
         private Aria2c mAria2c;
+        private decimal? mSelectedBandwidth = null;
+        private Dictionary<string, string> mUrlAndNameMap = new Dictionary<string, string>();
+        private Dictionary<string, string> mPidAndUrlMap = new Dictionary<string, string>();
 
         public MainForm()
         {
@@ -27,8 +31,6 @@ namespace HLS.Download.UI
             btnDoIt.Text = string.Format("下载\n({0})", getDownloadUrls().Length);
         }
 
-        private Dictionary<String, String> mUrlAndNameMap = new Dictionary<string, string>();
-        private Dictionary<String, String> mPidAndUrlMap = new Dictionary<string, string>();
         private void btnDoIt_Click(object sender, EventArgs e)
         {
             ((Button)sender).Enabled = false;
@@ -44,7 +46,7 @@ namespace HLS.Download.UI
                 mUrlAndNameMap.Clear();
                 mPidAndUrlMap.Clear();
 
-                List<String> urls = new List<string>();
+                List<string> urls = new List<string>();
                 foreach (var s in getDownloadUrls())
                 {
                     var urlAndName = s.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
@@ -212,26 +214,89 @@ namespace HLS.Download.UI
                 var r = t.Result;
 
                 //一个M3u8里可能定义了不同码率的新m3u8文件。
-                foreach (var p in r.Playlist)
+                if (r.Playlist.Length > 0)
                 {
-                    WriteLog(TAG, String.Format("下载指定码率={0},分辨率={1}", p.BANDWIDTH, p.RESOLUTION));
-                    WriteLog(TAG, "下载指定码率:路径=" + p.URI);
-                    var url = new Uri(baseUri, p.URI).AbsoluteUri;
+                    HLSPlaylist nextPlaylist = null;
+                    if (r.Playlist.Length == 1)
+                        nextPlaylist = r.Playlist[0];
+                    else
+                    {
+                        if (mSelectedBandwidth == null)
+                        {
+                            WriteLog(TAG, string.Format("停止下载视频流切片；因为存在多码率，且没有选择多码率下载策略或自定义码率无效:{0}", mSelectedBandwidth));
+
+                            WriteLog(TAG, "支持的码率有：");
+                            for (var pi = 0; pi < r.Playlist.Length; pi++)
+                            {
+                                var p = r.Playlist[pi];
+                                WriteLog(TAG, String.Format("{0}:码率={1},分辨率={2}", pi + 1, p.BANDWIDTH, p.RESOLUTION));
+                            }
+                            return;
+                        }
+                        //根据多码率下载策略取出需要的码率下载.
+                        decimal? lastBandwidth = null;
+                        foreach (var p in r.Playlist)
+                        {
+                            var tmpBand = decimal.Parse(p.BANDWIDTH);
+                            if (mSelectedBandwidth == decimal.MaxValue)
+                            {
+                                if (lastBandwidth == null || tmpBand > lastBandwidth)
+                                    nextPlaylist = p;
+                                continue;
+                            }
+                            if (mSelectedBandwidth == decimal.MinValue)
+                            {
+                                if (lastBandwidth == null || tmpBand < lastBandwidth)
+                                    nextPlaylist = p;
+                                continue;
+                            }
+                            if (mSelectedBandwidth == tmpBand)
+                            {
+                                nextPlaylist = p;
+                                //自定义模式，匹配成功直接退出循环。
+                                break;
+                            }
+                        }
+
+                        //自定义模式，匹配失败时，将所有码率输出来，方便定位。
+                        if (nextPlaylist == null)
+                        {
+                            WriteLog(TAG, string.Format("自定义码率匹配失败；自定义码率设置无效:{0}", mSelectedBandwidth));
+
+                            WriteLog(TAG, "支持的码率有：");
+                            for (var pi = 0; pi < r.Playlist.Length; pi++)
+                            {
+                                var p = r.Playlist[pi];
+                                WriteLog(TAG, String.Format("{0}:码率={1},分辨率={2}", pi + 1, p.BANDWIDTH, p.RESOLUTION));
+                            }
+                            return;
+                        }
+                    }
+
+                    WriteLog(TAG, String.Format("下载指定码率={0},分辨率={1}", nextPlaylist.BANDWIDTH, nextPlaylist.RESOLUTION));
+                    WriteLog(TAG, "下载指定码率:路径=" + nextPlaylist.URI);
+                    var url = new Uri(baseUri, nextPlaylist.URI).AbsoluteUri;
                     var gid = mAria2c.AddUri(url);
                     WriteLog(TAG, string.Format("下载指定码率:任务ID={0}", gid));
                 }
-                WriteLog(TAG, String.Format("需下载的视频流切片块数量={0}", r.Parts.Length));
-                foreach (var p in r.Parts)
+                else
                 {
-                    var url = new Uri(baseUri, p.Path).AbsoluteUri;
-                    mAria2c.AddUri(url);
+                    WriteLog(TAG, String.Format("需下载的视频流切片块数量={0}", r.Parts.Length));
+                    foreach (var p in r.Parts)
+                    {
+                        var url = new Uri(baseUri, p.Path).AbsoluteUri;
+                        mAria2c.AddUri(url);
+                    }
                 }
-                WriteLog(TAG, "执行完毕");
             }
             catch (Exception ex)
             {
                 WriteLog(TAG, "出现未知异常");
                 WriteLog(TAG, ex.ToString());
+            }
+            finally
+            {
+                WriteLog(TAG, "执行完毕");
             }
         }
 
@@ -320,6 +385,28 @@ namespace HLS.Download.UI
                     Aria2cRuntime.DownLoadDirectory = folderBrowserDialog1.SelectedPath;
                 WriteLog("设置全局下载目录", folderBrowserDialog1.SelectedPath);
             }
+        }
+
+        private void rdbSelectBandWidthCustom_CheckedChanged(object sender, EventArgs e)
+        {
+            txbCustomBandwidth.Enabled = rdbSelectBandWidthCustom.Checked;
+        }
+
+        private void rdbSelectBandWidthMax_CheckedChanged(object sender, EventArgs e)
+        {
+            mSelectedBandwidth = decimal.MaxValue;
+        }
+
+        private void rdbSelectBandWidthMin_CheckedChanged(object sender, EventArgs e)
+        {
+            mSelectedBandwidth = decimal.MinValue;
+        }
+
+        private void txbCustomBandwidth_TextChanged(object sender, EventArgs e)
+        {
+            decimal tmpdecimal;
+            decimal.TryParse(txbCustomBandwidth.Text, out tmpdecimal);
+            mSelectedBandwidth = tmpdecimal;
         }
     }
 }
