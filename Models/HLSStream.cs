@@ -36,7 +36,7 @@
                 if (line.Contains("EXTINF"))
                 {
                     PARTS.Add(new HLSStreamPart(line, lines[i + 1]));
-                    i = i + 2;
+                    i = i + 1;
                     continue;
                 }
                 if (line.Contains("EXTM3U"))
@@ -108,7 +108,7 @@
 
                     //
                     tmpPlaylist.URI = lines[i + 1];
-                    i = i + 2;
+                    i = i + 1;
 
                     Playlist.Add(tmpPlaylist);
                     #endregion
