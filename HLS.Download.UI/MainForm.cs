@@ -288,5 +288,15 @@ namespace HLS.Download.UI
         {
             Process.Start(Aria2cRuntime.DownLoadDirectory);
         }
+
+        private void btnSetDownloadLocation_Click(object sender, EventArgs e)
+        {
+            if (folderBrowserDialog1.ShowDialog(this) == DialogResult.OK)
+            {
+                if (mAria2c != null)
+                    Aria2cRuntime.DownLoadDirectory = folderBrowserDialog1.SelectedPath;
+                WriteLog("设置全局下载目录", folderBrowserDialog1.SelectedPath);
+            }
+        }
     }
 }
