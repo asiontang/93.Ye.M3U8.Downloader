@@ -28,26 +28,34 @@ namespace HLS.Download.UI
 
         private void btnDoIt_Click(object sender, EventArgs e)
         {
-            if (mAria2c == null)
-                btnStartAria2_Click(btnStartAria2, null);
-
+            ((Button)sender).Enabled = false;
+            Cursor.Current = Cursors.WaitCursor;
+            var TAG = "下载";
+            WriteLog(TAG, "执行中");
             try
             {
-                var urls = getDownloadUrls();
-                foreach (var url in urls)
+                //防止没启动Aria2
+                if (mAria2c == null)
+                    btnStartAria2_Click(btnStartAria2, null);
+
+                foreach (var url in getDownloadUrls())
                 {
+                    WriteLog(TAG, url);
                     var gid = mAria2c.AddUri(url);
-
-                    //Debug.WriteLine("url：");
-                    //Debug.WriteLine(url);
-                    //var task = HLS.Download.Models.HLSStream.Open(url);
-                    //Debug.WriteLine("Result：");
-                    //Debug.WriteLine(task.Result);
-
+                    WriteLog(TAG, string.Format("任务ID={0}", gid));
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                WriteLog(TAG, "出现未知异常");
+                WriteLog(TAG, ex.ToString());
             }
             finally
             {
+                ((Button)sender).Enabled = true;
+
+                Cursor.Current = Cursors.Default;
             }
         }
 
@@ -85,6 +93,13 @@ namespace HLS.Download.UI
                 WriteLog(TAG, "执行结果：" + (!btnStartAria2.Enabled ? "【成功】" : "[失败]"));
 
                 mAria2c = new Aria2c();
+                mAria2c.OnFinish += delegate (object obj, Aria2cTaskEvent taskEvent)
+                {
+                    WriteLog("下载状态更新", string.Format("OnFinish={0}; ErrorCode={1}; ErrorMessage={2}; "
+                        , taskEvent.Gid
+                        , taskEvent.Task.ErrorCode
+                        , taskEvent.Task.ErrorMessage));
+                };
             }
             catch (Exception ex)
             {
@@ -112,6 +127,7 @@ namespace HLS.Download.UI
             WriteLog(TAG, "执行中");
             try
             {
+                mAria2c = null;
                 Aria2cRuntime.ShutDown();
 
                 //进程遍历所有相同名字进程。
@@ -151,13 +167,23 @@ namespace HLS.Download.UI
 
         private void WriteLog(String tag, String info)
         {
+            if (txbLog.InvokeRequired)
+            {
+                while (!txbLog.IsHandleCreated)
+                {
+                    //解决窗体关闭时出现“访问已释放句柄“的异常
+                    if (txbLog.Disposing || txbLog.IsDisposed)
+                        return;
+                }
+                txbLog.Invoke(new MethodInvoker(() => WriteLog(tag, info)));
+                return;
+            }
 #if DEBUG
             Debug.Write(tag);
             Debug.Write("：");
             Debug.Write(info);
             Debug.WriteLine(info);
 #endif
-
             txbLog.AppendText(tag);
             txbLog.AppendText("：");
             txbLog.AppendText(info);
