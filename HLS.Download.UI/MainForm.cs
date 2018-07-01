@@ -374,6 +374,8 @@ namespace HLS.Download.UI
 
         private void btnOpenDownloadDir_Click(object sender, EventArgs e)
         {
+            if (mAria2c == null)
+                btnStartAria2_Click(btnStartAria2, null);
             Process.Start(Aria2cRuntime.DownLoadDirectory);
         }
 
