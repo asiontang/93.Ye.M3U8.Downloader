@@ -70,6 +70,10 @@ namespace HLS.Download.UI
             settings.Aria2Port = 6800;
             Aria2cRuntime.Settings = settings;
 
+            var downloadPath = Path.Combine(Environment.CurrentDirectory, "Download");
+            Directory.CreateDirectory(downloadPath);
+            Aria2cRuntime.DownLoadDirectory = downloadPath;
+
             btnStartAria2.Enabled = !Aria2cRuntime.IsLoaded;
             WriteLog(TAG, "检测到 Aria2 状态为" + (!btnStartAria2.Enabled ? "【已启动】" : "[未启动]"));
 
@@ -95,10 +99,7 @@ namespace HLS.Download.UI
                 mAria2c = new Aria2c();
                 mAria2c.OnFinish += delegate (object obj, Aria2cTaskEvent taskEvent)
                 {
-                    WriteLog("下载状态更新", string.Format("OnFinish={0}; ErrorCode={1}; ErrorMessage={2}; "
-                        , taskEvent.Gid
-                        , taskEvent.Task.ErrorCode
-                        , taskEvent.Task.ErrorMessage));
+                    OnDownloadCompleted(taskEvent);
                 };
             }
             catch (Exception ex)
@@ -116,6 +117,89 @@ namespace HLS.Download.UI
                 //((Button)sender).Enabled = true;
 
                 Cursor.Current = Cursors.Default;
+            }
+        }
+
+        private void OnDownloadCompleted(Aria2cTaskEvent taskEvent)
+        {
+            var TAG2 = "下载状态更新";
+            var uri = taskEvent.Task.Files[0].Uris[0].Uri.ToString();
+            if (taskEvent.Task.ErrorCode != 0)
+            {
+                WriteLog(TAG2, uri);
+                WriteLog(TAG2, string.Format("OnFinish={0}; ErrorCode={1}; ErrorMessage={2}; "
+                    , taskEvent.Gid
+                    , taskEvent.Task.ErrorCode
+                    , taskEvent.Task.ErrorMessage));
+                return;
+            }
+            WriteLog(TAG2, uri);
+            WriteLog(TAG2, string.Format("OnFinish={0}; 下载完毕！", taskEvent.Gid));
+
+            var extension = Path.GetExtension(uri).ToLower();
+            switch (extension)
+            {
+                case ".m3u8":
+                    //当序列下载完成时。
+                    OnDownloadCompletedM3U8(taskEvent);
+                    break;
+                case ".ts":
+                    //当序列下载完成时。
+                    OnDownloadCompletedTS(taskEvent);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void OnDownloadCompletedTS(Aria2cTaskEvent taskEvent)
+        {
+            try
+            {
+                var file = taskEvent.Task.Files[0];
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+            }
+        }
+
+        private void OnDownloadCompletedM3U8(Aria2cTaskEvent taskEvent)
+        {
+            var TAG = "解析M3U8";
+            WriteLog(TAG, "执行中");
+            try
+            {
+                var file = taskEvent.Task.Files[0];
+                Uri baseUri;
+                Uri.TryCreate(file.Uris[0].Uri, UriKind.Absolute, out baseUri);
+
+                var t = HLS.Download.Models.HLSStream.Open(file.Path);
+                var r = t.Result;
+
+                //一个M3u8里可能定义了不同码率的新m3u8文件。
+                foreach (var p in r.Playlist)
+                {
+                    WriteLog(TAG, String.Format("下载指定码率={0},分辨率={1}", p.BANDWIDTH, p.RESOLUTION));
+                    WriteLog(TAG, p.URI);
+                    var url = p.URI;
+                    var gid = mAria2c.AddUri(url);
+                    WriteLog(TAG, string.Format("任务ID={0}", gid));
+                }
+                WriteLog(TAG, String.Format("需下载的视频流数量={0}", r.Parts.Length));
+                foreach (var p in r.Parts)
+                {
+                    var url = p.Path;
+                    mAria2c.AddUri(url);
+                }
+                WriteLog(TAG, "执行完毕");
+            }
+            catch (Exception ex)
+            {
+                WriteLog(TAG, "出现未知异常");
+                WriteLog(TAG, ex.ToString());
             }
         }
 
@@ -181,7 +265,6 @@ namespace HLS.Download.UI
 #if DEBUG
             Debug.Write(tag);
             Debug.Write("：");
-            Debug.Write(info);
             Debug.WriteLine(info);
 #endif
             txbLog.AppendText(tag);
@@ -192,9 +275,7 @@ namespace HLS.Download.UI
 
         private void btnOpenDownloadDir_Click(object sender, EventArgs e)
         {
-            var downloadPath = Path.Combine(Environment.CurrentDirectory, "Download");
-            Directory.CreateDirectory(downloadPath);
-            Process.Start(downloadPath);
+            Process.Start(Aria2cRuntime.DownLoadDirectory);
         }
     }
 }
