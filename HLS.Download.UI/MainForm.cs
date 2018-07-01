@@ -184,15 +184,15 @@ namespace HLS.Download.UI
                 foreach (var p in r.Playlist)
                 {
                     WriteLog(TAG, String.Format("下载指定码率={0},分辨率={1}", p.BANDWIDTH, p.RESOLUTION));
-                    WriteLog(TAG, p.URI);
-                    var url = p.URI;
+                    WriteLog(TAG, "下载指定码率:路径=" + p.URI);
+                    var url = new Uri(baseUri, p.URI).AbsoluteUri;
                     var gid = mAria2c.AddUri(url);
-                    WriteLog(TAG, string.Format("任务ID={0}", gid));
+                    WriteLog(TAG, string.Format("下载指定码率:任务ID={0}", gid));
                 }
-                WriteLog(TAG, String.Format("需下载的视频流数量={0}", r.Parts.Length));
+                WriteLog(TAG, String.Format("需下载的视频流切片块数量={0}", r.Parts.Length));
                 foreach (var p in r.Parts)
                 {
-                    var url = p.Path;
+                    var url = new Uri(baseUri, p.Path).AbsoluteUri;
                     mAria2c.AddUri(url);
                 }
                 WriteLog(TAG, "执行完毕");
