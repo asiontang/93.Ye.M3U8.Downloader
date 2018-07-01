@@ -78,7 +78,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(157, 62);
+            this.label2.Location = new System.Drawing.Point(257, 62);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(203, 12);
             this.label2.TabIndex = 2;
@@ -89,9 +89,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(4, 62);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(131, 12);
+            this.label1.Size = new System.Drawing.Size(155, 12);
             this.label1.TabIndex = 2;
-            this.label1.Text = "格式:文件名 空格 网址\r\n";
+            this.label1.Text = "正确格式:文件名 空格 网址\r\n";
             // 
             // btnDoIt
             // 

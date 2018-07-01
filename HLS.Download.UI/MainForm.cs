@@ -54,7 +54,8 @@ namespace HLS.Download.UI
                     var urlAndName = s.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                     if (urlAndName.Length != 2)
                     {
-                        WriteLog(TAG, string.Format("下载格式有误={1}", s));
+                        WriteLog(TAG, "以下格式有误");
+                        WriteLog(TAG, s);
                         return;
                     }
                     var name = urlAndName[0];
