@@ -14,6 +14,7 @@ namespace HLS.Download.UI
         private Aria2c mAria2c;
         private decimal? mSelectedBandwidth = null;
         private Dictionary<string, string> mUrlAndNameMap = new Dictionary<string, string>();
+        private Dictionary<string, string> mUrlAndDownloadDirMap = new Dictionary<string, string>();
         private Dictionary<string, string> mPidAndUrlMap = new Dictionary<string, string>();
 
         public MainForm()
@@ -46,6 +47,7 @@ namespace HLS.Download.UI
                 mUrlAndNameMap.Clear();
                 mPidAndUrlMap.Clear();
 
+                var downloadDir = Aria2cRuntime.DownLoadDirectory;
                 List<string> urls = new List<string>();
                 foreach (var s in getDownloadUrls())
                 {
@@ -53,16 +55,23 @@ namespace HLS.Download.UI
                     if (urlAndName.Length != 2)
                     {
                         WriteLog(TAG, string.Format("下载格式有误={1}", s));
-                        continue;
+                        return;
                     }
                     var name = urlAndName[0];
                     var url = urlAndName[1];
-                    mUrlAndNameMap.Add(url, name);
-                    WriteLog(TAG, string.Format("文件名={0} 地址={1}", name, url));
+                    var dir = Path.Combine(downloadDir, name);//使用文件名作为新目录来临时存储多个切片。
+                    Directory.CreateDirectory(dir);
+
                     urls.Add(url);
+                    mUrlAndNameMap.Add(url, name);
+                    mUrlAndDownloadDirMap.Add(url, dir);
+
+                    WriteLog(TAG, string.Format("文件名={0} 下载网址={1}", name, url));
+                    WriteLog(TAG, string.Format("文件名={0} 下载目录={1}", name, dir));
                 }
+
                 foreach (var url in urls)
-                    mPidAndUrlMap.Add(mAria2c.AddUri(url), url);
+                    mPidAndUrlMap.Add(mAria2c.AddUri(url, "", mUrlAndDownloadDirMap[url]), url);
             }
             catch (Exception ex)
             {
@@ -207,6 +216,7 @@ namespace HLS.Download.UI
             try
             {
                 var file = taskEvent.Task.Files[0];
+                var dir = Path.GetDirectoryName(file.Path);
                 Uri baseUri;
                 Uri.TryCreate(file.Uris[0].Uri, UriKind.Absolute, out baseUri);
 
@@ -217,6 +227,8 @@ namespace HLS.Download.UI
                 if (r.Playlist.Length > 0)
                 {
                     HLSPlaylist nextPlaylist = null;
+
+                    #region 多码率选择策略
                     if (r.Playlist.Length == 1)
                         nextPlaylist = r.Playlist[0];
                     else
@@ -272,11 +284,12 @@ namespace HLS.Download.UI
                             return;
                         }
                     }
+                    #endregion
 
                     WriteLog(TAG, String.Format("下载指定码率={0},分辨率={1}", nextPlaylist.BANDWIDTH, nextPlaylist.RESOLUTION));
                     WriteLog(TAG, "下载指定码率:路径=" + nextPlaylist.URI);
                     var url = new Uri(baseUri, nextPlaylist.URI).AbsoluteUri;
-                    var gid = mAria2c.AddUri(url);
+                    var gid = mAria2c.AddUri(url, "", dir);
                     WriteLog(TAG, string.Format("下载指定码率:任务ID={0}", gid));
                 }
                 else
@@ -285,7 +298,7 @@ namespace HLS.Download.UI
                     foreach (var p in r.Parts)
                     {
                         var url = new Uri(baseUri, p.Path).AbsoluteUri;
-                        mAria2c.AddUri(url);
+                        mAria2c.AddUri(url, "", dir);
                     }
                 }
             }
