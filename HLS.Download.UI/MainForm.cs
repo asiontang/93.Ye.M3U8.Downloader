@@ -359,7 +359,6 @@ namespace HLS.Download.UI
 
             //更强大的UI，支持查看和设置各种选项。
             Process.Start("http://ariang.mayswind.net/latest/");
-
         }
 
         private void WriteLog(String tag, String info)
