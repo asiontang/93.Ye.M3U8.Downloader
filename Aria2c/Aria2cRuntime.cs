@@ -144,8 +144,13 @@ namespace FlyVR.Aria2
         /// </summary>
         public static void ShutDown()
         {
-            aria2cProcess?.Kill();
-            aria2cProcess?.Dispose();
+            if (aria2cProcess == null)
+                return;
+            if (!aria2cProcess.HasExited)
+            {
+                aria2cProcess.Kill();
+                aria2cProcess.Dispose();
+            }
             aria2cProcess = null;
         }
         #endregion

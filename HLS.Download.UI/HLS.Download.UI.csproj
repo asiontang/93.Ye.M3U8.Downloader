@@ -49,6 +49,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="FFmpeg\ffmpeg.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -62,7 +65,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Content Include="Aria2\aria2c.session">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Aria2\aria2c.conf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
