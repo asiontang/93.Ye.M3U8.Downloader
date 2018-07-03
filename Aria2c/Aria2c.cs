@@ -161,8 +161,13 @@ namespace FlyVR.Aria2
             {
                 timer = new Timer(1000);
                 timer.Elapsed += new ElapsedEventHandler(OnTimeOut);
-                timer.AutoReset = true;
-                timer.Enabled = true;
+
+                //设置为False，以便超时后触发一次事件就停止。必须再调用一次Start才能继续下一次触发。
+                //这样可以保证，在Elapsed事件里出现耗时操作时，能够线性执行。否则interval秒内都没执行完成时，
+                //不会出现并发执行耗时动作。
+                timer.AutoReset = false;
+
+                //timer.Enabled = true;
                 timer.Start();
             }
             else
@@ -191,8 +196,22 @@ namespace FlyVR.Aria2
         /// <param name="evt"></param>
         public void OnTimeOut(object sender, EventArgs evt)
         {
-            GetTaskStatus();
-            GetGlobalStatus();
+            try
+            {
+                GetTaskStatus();
+                GetGlobalStatus();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                //AutoReset设置为False，以便超时后触发一次事件就停止。必须再调用一次Start才能继续下一次触发。
+                //这样可以保证，在Elapsed事件里出现耗时操作时，能够线性执行。否则interval秒内都没执行完成时，
+                //不会出现并发执行耗时动作。
+                timer.Start();
+            }
         }
 
         /// <summary>
