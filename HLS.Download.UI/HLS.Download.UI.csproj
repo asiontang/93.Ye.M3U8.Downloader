@@ -88,7 +88,7 @@
       <Project>{e352e426-a614-4e27-a8ee-cd80fa184ff2}</Project>
       <Name>Aria2c</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HLS.Download.csproj">
+    <ProjectReference Include="..\HLS.Download\HLS.Download.csproj">
       <Project>{d34e9cdc-0160-4357-8096-287f94e1b2ac}</Project>
       <Name>HLS.Download</Name>
     </ProjectReference>
