@@ -54,6 +54,8 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnPauseAll = new System.Windows.Forms.Button();
+            this.btnUnPauseAll = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -68,7 +70,7 @@
             this.groupBox1.Controls.Add(this.btnDoIt);
             this.groupBox1.Controls.Add(this.txbUrls);
             this.groupBox1.Controls.Add(this.panel1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 76);
+            this.groupBox1.Location = new System.Drawing.Point(12, 178);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(516, 142);
             this.groupBox1.TabIndex = 0;
@@ -202,11 +204,13 @@
             this.txbLog.Multiline = true;
             this.txbLog.Name = "txbLog";
             this.txbLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txbLog.Size = new System.Drawing.Size(385, 312);
+            this.txbLog.Size = new System.Drawing.Size(385, 420);
             this.txbLog.TabIndex = 1;
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.btnUnPauseAll);
+            this.groupBox2.Controls.Add(this.btnPauseAll);
             this.groupBox2.Controls.Add(this.btnSetDownloadLocation);
             this.groupBox2.Controls.Add(this.btnOpenDownloadDir);
             this.groupBox2.Controls.Add(this.btnKillAllAria2);
@@ -214,7 +218,7 @@
             this.groupBox2.Controls.Add(this.btnOpenAria2WebUI);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(516, 58);
+            this.groupBox2.Size = new System.Drawing.Size(516, 160);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Aria2控制台:";
@@ -274,7 +278,7 @@
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.button1);
             this.groupBox3.Controls.Add(this.textBox1);
-            this.groupBox3.Location = new System.Drawing.Point(12, 224);
+            this.groupBox3.Location = new System.Drawing.Point(12, 326);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(516, 121);
             this.groupBox3.TabIndex = 3;
@@ -320,16 +324,36 @@
             this.groupBox4.Controls.Add(this.txbLog);
             this.groupBox4.Location = new System.Drawing.Point(534, 12);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(399, 333);
+            this.groupBox4.Size = new System.Drawing.Size(399, 441);
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "日志信息:";
+            // 
+            // btnPauseAll
+            // 
+            this.btnPauseAll.Location = new System.Drawing.Point(6, 58);
+            this.btnPauseAll.Name = "btnPauseAll";
+            this.btnPauseAll.Size = new System.Drawing.Size(96, 36);
+            this.btnPauseAll.TabIndex = 5;
+            this.btnPauseAll.Text = "全部暂停下载";
+            this.btnPauseAll.UseVisualStyleBackColor = true;
+            this.btnPauseAll.Click += new System.EventHandler(this.btnPauseAll_Click);
+            // 
+            // btnUnPauseAll
+            // 
+            this.btnUnPauseAll.Location = new System.Drawing.Point(108, 58);
+            this.btnUnPauseAll.Name = "btnUnPauseAll";
+            this.btnUnPauseAll.Size = new System.Drawing.Size(96, 36);
+            this.btnUnPauseAll.TabIndex = 6;
+            this.btnUnPauseAll.Text = "全部开始下载";
+            this.btnUnPauseAll.UseVisualStyleBackColor = true;
+            this.btnUnPauseAll.Click += new System.EventHandler(this.btnUnPauseAll_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(945, 354);
+            this.ClientSize = new System.Drawing.Size(945, 462);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -376,6 +400,8 @@
         private System.Windows.Forms.RadioButton rdbSelectBandWidthCustom;
         private System.Windows.Forms.RadioButton rdbSelectBandWidthMin;
         private System.Windows.Forms.RadioButton rdbSelectBandWidthMax;
+        private System.Windows.Forms.Button btnUnPauseAll;
+        private System.Windows.Forms.Button btnPauseAll;
     }
 }
 

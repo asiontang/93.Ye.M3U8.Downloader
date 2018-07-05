@@ -435,5 +435,27 @@ namespace HLS.Download.UI
             decimal.TryParse(txbCustomBandwidth.Text, out tmpdecimal);
             mSelectedBandwidth = tmpdecimal;
         }
+
+        private void btnPauseAll_Click(object sender, EventArgs e)
+        {
+            if (mAria2c == null)
+                btnStartAria2_Click(btnStartAria2, null);
+
+            var result = mAria2c.ForcePauseAll();
+            var TAG = "全部暂停下载";
+            WriteLog(TAG, "执行完毕");
+            WriteLog(TAG, "执行结果=" + result);
+        }
+
+        private void btnUnPauseAll_Click(object sender, EventArgs e)
+        {
+            if (mAria2c == null)
+                btnStartAria2_Click(btnStartAria2, null);
+
+            var result = mAria2c.UnPauseAll();
+            var TAG = "全部启动下载";
+            WriteLog(TAG, "执行完毕");
+            WriteLog(TAG, "执行结果=" + result);
+        }
     }
 }
