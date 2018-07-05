@@ -56,6 +56,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnPauseAll = new System.Windows.Forms.Button();
             this.btnUnPauseAll = new System.Windows.Forms.Button();
+            this.txbAria2GlobalInfo = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -70,7 +71,7 @@
             this.groupBox1.Controls.Add(this.btnDoIt);
             this.groupBox1.Controls.Add(this.txbUrls);
             this.groupBox1.Controls.Add(this.panel1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 178);
+            this.groupBox1.Location = new System.Drawing.Point(12, 145);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(516, 142);
             this.groupBox1.TabIndex = 0;
@@ -204,11 +205,12 @@
             this.txbLog.Multiline = true;
             this.txbLog.Name = "txbLog";
             this.txbLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txbLog.Size = new System.Drawing.Size(385, 420);
+            this.txbLog.Size = new System.Drawing.Size(385, 382);
             this.txbLog.TabIndex = 1;
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.txbAria2GlobalInfo);
             this.groupBox2.Controls.Add(this.btnUnPauseAll);
             this.groupBox2.Controls.Add(this.btnPauseAll);
             this.groupBox2.Controls.Add(this.btnSetDownloadLocation);
@@ -218,7 +220,7 @@
             this.groupBox2.Controls.Add(this.btnOpenAria2WebUI);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(516, 160);
+            this.groupBox2.Size = new System.Drawing.Size(516, 127);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Aria2控制台:";
@@ -278,7 +280,7 @@
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.button1);
             this.groupBox3.Controls.Add(this.textBox1);
-            this.groupBox3.Location = new System.Drawing.Point(12, 326);
+            this.groupBox3.Location = new System.Drawing.Point(12, 293);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(516, 121);
             this.groupBox3.TabIndex = 3;
@@ -324,7 +326,7 @@
             this.groupBox4.Controls.Add(this.txbLog);
             this.groupBox4.Location = new System.Drawing.Point(534, 12);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(399, 441);
+            this.groupBox4.Size = new System.Drawing.Size(399, 403);
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "日志信息:";
@@ -349,11 +351,21 @@
             this.btnUnPauseAll.UseVisualStyleBackColor = true;
             this.btnUnPauseAll.Click += new System.EventHandler(this.btnUnPauseAll_Click);
             // 
+            // txbAria2GlobalInfo
+            // 
+            this.txbAria2GlobalInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txbAria2GlobalInfo.Enabled = false;
+            this.txbAria2GlobalInfo.Location = new System.Drawing.Point(6, 100);
+            this.txbAria2GlobalInfo.Name = "txbAria2GlobalInfo";
+            this.txbAria2GlobalInfo.ReadOnly = true;
+            this.txbAria2GlobalInfo.Size = new System.Drawing.Size(504, 21);
+            this.txbAria2GlobalInfo.TabIndex = 7;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(945, 462);
+            this.ClientSize = new System.Drawing.Size(945, 424);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -365,6 +377,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -402,6 +415,7 @@
         private System.Windows.Forms.RadioButton rdbSelectBandWidthMax;
         private System.Windows.Forms.Button btnUnPauseAll;
         private System.Windows.Forms.Button btnPauseAll;
+        private System.Windows.Forms.TextBox txbAria2GlobalInfo;
     }
 }
 

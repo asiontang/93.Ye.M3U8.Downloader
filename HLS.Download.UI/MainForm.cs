@@ -145,6 +145,28 @@ namespace HLS.Download.UI
                 }
 
                 mAria2c = new Aria2c();
+                mAria2c.OnGlobalStatusChanged += delegate (object obj, Aria2cGlobalStatEvent gevent)
+                {
+                    if (txbAria2GlobalInfo.InvokeRequired)
+                    {
+                        while (!txbAria2GlobalInfo.IsHandleCreated)
+                        {
+                            //解决窗体关闭时出现“访问已释放句柄“的异常
+                            if (txbAria2GlobalInfo.Disposing || txbAria2GlobalInfo.IsDisposed)
+                                return;
+                        }
+                        txbAria2GlobalInfo.Invoke(new MethodInvoker(
+                            () =>
+                            txbAria2GlobalInfo.Text = string.Format("DownloadSpeed={0} NumActive={1} NumWaiting={2} NumStopped={3}"
+                              , gevent.Stat.DownloadSpeed
+                              , gevent.Stat.NumActive
+                              , gevent.Stat.NumWaiting
+                              , gevent.Stat.NumStopped
+                              ))
+                          );
+                        return;
+                    }
+                };
                 mAria2c.OnError += delegate (object obj, Aria2cTaskEvent taskEvent)
                 {
                     var TAG2 = "下载状态更新";
