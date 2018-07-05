@@ -145,6 +145,20 @@ namespace HLS.Download.UI
                 }
 
                 mAria2c = new Aria2c();
+                mAria2c.OnError += delegate (object obj, Aria2cTaskEvent taskEvent)
+                {
+                    var TAG2 = "下载状态更新";
+                    var uri = taskEvent.Task.Files[0].Uris[0].Uri.ToString();
+                    if (taskEvent.Task.ErrorCode != 0)
+                    {
+                        WriteLog(TAG2, uri);
+                        WriteLog(TAG2, string.Format("OnFinish={0}; ErrorCode={1}; ErrorMessage={2}; "
+                            , taskEvent.Gid
+                            , taskEvent.Task.ErrorCode
+                            , taskEvent.Task.ErrorMessage));
+                        return;
+                    }
+                };
                 mAria2c.OnFinish += delegate (object obj, Aria2cTaskEvent taskEvent)
                 {
                     OnDownloadCompleted(taskEvent);
