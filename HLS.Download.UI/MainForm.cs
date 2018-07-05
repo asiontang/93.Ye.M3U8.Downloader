@@ -127,7 +127,10 @@ namespace HLS.Download.UI
             WriteLog(TAG, "执行中");
             try
             {
-                Aria2cRuntime.Start();
+                //进程遍历所有相同名字进程，假如存在则不再启动。
+                var plist = Process.GetProcessesByName("aria2c");
+                if (plist.Length == 0)
+                    Aria2cRuntime.Start();
 
                 WriteLog(TAG, "执行完毕。");
 
