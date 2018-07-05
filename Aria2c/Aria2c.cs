@@ -235,6 +235,9 @@ namespace FlyVR.Aria2
                     try
                     {
                         Aria2cTask task = TellStatus(gid);
+                        if (task == null)
+                            //当一个任务出问题,则本次循环就放弃掉.例如被杀掉进程后,要是还循环获取状态,是始终拿不到状态的.
+                            break;
                         if (downLoadDict[gid].Status != task.Status)
                         {
                             OnStatusChanged(task);
