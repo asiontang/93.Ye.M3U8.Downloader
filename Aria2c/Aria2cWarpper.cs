@@ -66,7 +66,7 @@ namespace FlyVR.Aria2
         /// <param name="fileName">输出文件名</param>
         /// <param name="dir">下载文件夹</param>
         /// <returns>成功返回任务标识符，失败返回空</returns>
-        public static string AddUri(string uri, string fileName = "", string dir = "")
+        public static string AddUri(string uri, string fileName = "", string dir = "", string userAgent = null)
         {
             string[] uris = new string[] { uri };
             string gid;
@@ -81,6 +81,9 @@ namespace FlyVR.Aria2
             {
                 option.Add("out", fileName);
             }
+
+            if (!string.IsNullOrWhiteSpace(userAgent))
+                option.Add("user-agent", userAgent);
 
             if (option.Count > 0)
             {

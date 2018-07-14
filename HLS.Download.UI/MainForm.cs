@@ -25,6 +25,7 @@ namespace HLS.Download.UI
     {
         private Aria2c mAria2c;
         private decimal? mSelectedBandwidth = null;
+        private string mSelectedUserAgent;
         private Dictionary<string, string> mUrlAndNameMap = new Dictionary<string, string>();
         private Dictionary<string, string> mUrlAndDownloadDirMap = new Dictionary<string, string>();
         private Dictionary<string, string> mPidAndUrlMap = new Dictionary<string, string>();
@@ -32,6 +33,7 @@ namespace HLS.Download.UI
         public MainForm()
         {
             InitializeComponent();
+            mSelectedUserAgent = cbbUserAgent.Text;
         }
 
         private string[] getDownloadUrls()
@@ -84,7 +86,7 @@ namespace HLS.Download.UI
                 }
 
                 foreach (var url in urls)
-                    mPidAndUrlMap.Add(mAria2c.AddUri(url, "", mUrlAndDownloadDirMap[url]), url);
+                    mPidAndUrlMap.Add(mAria2c.AddUri(url, "", mUrlAndDownloadDirMap[url], mSelectedUserAgent), url);
             }
             catch (Exception ex)
             {
@@ -341,7 +343,7 @@ namespace HLS.Download.UI
                     WriteLog(TAG, String.Format("下载指定码率={0},分辨率={1}", nextPlaylist.BANDWIDTH, nextPlaylist.RESOLUTION));
                     WriteLog(TAG, "下载指定码率:路径=" + nextPlaylist.URI);
                     var url = new Uri(baseUri, nextPlaylist.URI).AbsoluteUri;
-                    var gid = mAria2c.AddUri(url, "", dir);
+                    var gid = mAria2c.AddUri(url, "", dir, mSelectedUserAgent);
                     WriteLog(TAG, string.Format("下载指定码率:任务ID={0}", gid));
                 }
                 else
@@ -350,7 +352,7 @@ namespace HLS.Download.UI
                     foreach (var p in r.Parts)
                     {
                         var url = new Uri(baseUri, p.Path).AbsoluteUri;
-                        mAria2c.AddUri(url, "", dir);
+                        mAria2c.AddUri(url, "", dir, mSelectedUserAgent);
                     }
                 }
             }
@@ -495,6 +497,11 @@ namespace HLS.Download.UI
             var TAG = "全部启动下载";
             WriteLog(TAG, "执行完毕");
             WriteLog(TAG, "执行结果=" + result);
+        }
+
+        private void cbbUserAgent_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mSelectedUserAgent = cbbUserAgent.Text;
         }
     }
 }

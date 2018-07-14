@@ -437,11 +437,11 @@ namespace FlyVR.Aria2
         /// <param name="fileName">输出文件名</param>
         /// <param name="dir">下载文件夹</param>
         /// <returns>成功返回任务标识符，失败返回空</returns>
-        public string AddUri(string uri, string fileName = "", string dir = "")
+        public string AddUri(string uri, string fileName = "", string dir = "", string userAgent = null)
         {
             try
             {
-                string gid = Aria2cWarpper.AddUri(uri, fileName, dir);
+                string gid = Aria2cWarpper.AddUri(uri, fileName, dir, userAgent);
                 if (!string.IsNullOrWhiteSpace(gid))
                 {
                     Aria2cTask task = Aria2cWarpper.TellStatus(gid);
