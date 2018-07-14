@@ -160,8 +160,8 @@ namespace HLS.Download.UI
                         }
                         txbAria2GlobalInfo.Invoke(new MethodInvoker(
                             () =>
-                            txbAria2GlobalInfo.Text = string.Format("DownloadSpeed={0} NumActive={1} NumWaiting={2} NumStopped={3}"
-                              , gevent.Stat.DownloadSpeed
+                            txbAria2GlobalInfo.Text = string.Format("DownloadSpeed={0:F2}KB/S NumActive={1} NumWaiting={2} NumStopped={3}"
+                              , gevent.Stat.DownloadSpeed / 1024d
                               , gevent.Stat.NumActive
                               , gevent.Stat.NumWaiting
                               , gevent.Stat.NumStopped
