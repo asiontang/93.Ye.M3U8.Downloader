@@ -477,6 +477,207 @@ namespace HLS.Download.UI
             mSelectedBandwidth = tmpdecimal;
         }
 
+        private void btnMerge_Click(object sender, EventArgs e)
+        {
+            ((Button)sender).Enabled = false;
+            Cursor.Current = Cursors.WaitCursor;
+            var TAG = "合并";
+            WriteLog(TAG, "执行中");
+            try
+            {
+                //检测必要的程序都存在
+                var ffmpegPath = Path.Combine(Environment.CurrentDirectory, "FFmpeg\\ffmpeg.exe");
+                WriteLog(TAG, "FFmpeg所在路径=" + ffmpegPath);
+                if (!File.Exists(ffmpegPath))
+                {
+                    WriteLog(TAG, "检测到该路径的FFmpeg文件不存在！停止执行。");
+                    return;
+                }
+
+                //获取下载目录
+                WriteLog(TAG, "获取获取下载目录中");
+                var DownloadDirectory = Aria2cRuntime.DownLoadDirectory;
+                WriteLog(TAG, "获取到的下载目录=" + DownloadDirectory);
+
+                //遍历下载目录的所有目录里是否有必要的文件
+                WriteLog(TAG, "获取获取下载目录中的所有子目录中");
+                var dirs = Directory.GetDirectories(DownloadDirectory);
+                WriteLog(TAG, "检测到子目录数量=" + dirs.Length);
+                foreach (var dir in dirs)
+                {
+                    var dirName = Path.GetFileName(dir);
+                    WriteLog(TAG, string.Format("子目录{0}：检测是否包含.M3U8文件中", dirName));
+
+                    //获取目录中所有文件
+                    var files = Directory.GetFiles(dir);
+
+                    //提取其中的 两种不同的文件 列表。
+                    var m3u8List = new List<string>();
+                    var tsList = new List<string>();
+                    foreach (var file in files)
+                    {
+                        switch (Path.GetExtension(file).ToLower())
+                        {
+                            case ".m3u8":
+                                m3u8List.Add(file);
+                                break;
+                            case ".ts":
+                                tsList.Add(file);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    if (m3u8List.Count == 0)
+                    {
+                        WriteLog(TAG, string.Format("子目录{0}：没有检测到.M3U8文件，跳过！", dirName));
+                        continue;
+                    }
+
+                    //先从 m3u8 文件里提取出 ts 文件列表。
+                    foreach (var m3u8File in m3u8List)
+                    {
+                        WriteLog(TAG, string.Format("子目录{0}：分析{1}文件中", dirName, Path.GetFileName(m3u8File)));
+                        var txt = File.ReadAllText(m3u8File);
+
+                        //检测是否为TS清单文件
+                        {
+                            if (!txt.Contains(".ts") || !txt.Contains("EXTINF"))
+                            {
+                                WriteLog(TAG, string.Format("子目录{0}：分析{1}文件结果：此文件不是TS清单文件，跳过！"
+                                    , dirName, Path.GetFileName(m3u8File)));
+                                continue;
+                            }
+                        }
+
+                        //计算总的分片数量。
+                        {
+                            var count1 = getCountOfString(txt, ".ts");
+                            var count2 = getCountOfString(txt, "EXTINF");
+                            if (count1 != count2)
+                            {
+                                WriteLog(TAG, string.Format("子目录{0}：分析{1}文件结果：.ts出现次数={2} 与 EXTINF出现次数={3} 不一致，跳过！"
+                                    , dirName, Path.GetFileName(m3u8File), count1, count2));
+                                continue;
+                            }
+                            if (tsList.Count != count1)
+                            {
+                                WriteLog(TAG, string.Format("子目录{0}：分析{1}文件结果：.ts切片理论数量={2} 与 实际数量={3} 不一致，跳过！"
+                                    , dirName, Path.GetFileName(m3u8File), count1, tsList.Count));
+                                continue;
+                            }
+                            WriteLog(TAG, string.Format("子目录{0}：分析{1}文件结果：检测到正确数量的.ts切片={2}"
+                                , dirName, Path.GetFileName(m3u8File), tsList.Count));
+                        }
+
+                        //改造此清单文件形成本地可用的新清单文件
+                        var newM3U8File = getNewM3U8File(txt, m3u8File);
+
+                        //拼接最终执行的命令
+                        {
+                            //{ffmpeg} -threads 1 -i {列表.m3u8} -c copy {文件名}.mkv
+                            var cmd = txbMergeCMD.Text;
+                            cmd = cmd.Replace("{ffmpeg}", ffmpegPath);
+                            cmd = cmd.Replace("{列表.m3u8}", newM3U8File);
+                            cmd = cmd.Replace("{文件名}", dirName);
+
+                            WriteLog(TAG, string.Format("子目录{0}：分析{1}文件结果：尝试执行命令{2}{3}"
+                                , dirName, Path.GetFileName(m3u8File), Environment.NewLine, cmd));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteLog(TAG, "出现未知异常");
+                WriteLog(TAG, ex.ToString());
+            }
+            finally
+            {
+                WriteLog(TAG, "执行完毕");
+                Cursor.Current = Cursors.Default;
+                ((Button)sender).Enabled = true;
+            }
+        }
+
+        private string getNewM3U8File(string txt, string oldFile)
+        {
+            //找到第一个 / 符号
+            var sIndex1 = txt.IndexOf("/");
+
+            //假如找不到URI的分隔符 / 则不需要转换了。情况0.
+            if (sIndex1 == -1)
+                /*--------------------------------------------------
+                 * 情况0：
+                 * #EXTINF:4.56,
+                 * vKOnx78R3460000.ts
+                 *--------------------------------------------------*/
+                return oldFile;
+
+            //找到 这个符号 之后的 .ts 
+            var tsIndex = txt.IndexOf(".ts", sIndex1);
+
+            //再从 tsIndex 往前找 / 符号
+            var sIndex2 = txt.LastIndexOf("/", tsIndex);
+
+            //当 sIndex2 = sIndex1 时，说明是情况1. 那么就不需要转换新列表
+            if (sIndex1 == sIndex2)
+                /*--------------------------------------------------
+                 * 情况1：
+                 * #EXTINF:4.56,
+                 * /vKOnx78R3460000.ts
+                 *---------------------------------------------------*/
+                return oldFile;
+
+            //查找第一个 分隔符 左边的换行符
+            var newLineIndex = txt.LastIndexOf("\n", sIndex1);
+
+            //假如 左边的换行符 和 分隔符位置一致时
+            var needReplaceString = "";
+            if (newLineIndex == sIndex1)
+            {
+                /*--------------------------------------------------
+                 * 情况2：
+                 * #EXTINF:4.56,
+                 * /20180303/E1okxWlJ/800kb/hls/vKOnx78R3460000.ts
+                 *---------------------------------------------------*/
+
+                //截取两个 / 符号之间的字符串
+                needReplaceString = txt.Substring(sIndex1, sIndex2 - sIndex1);
+            }
+            else
+            {
+                /*--------------------------------------------------
+                 * 情况3：
+                 * #EXTINF:4.56,
+                 * http://a.b.c/d/vKOnx78R3460000.ts
+                 *---------------------------------------------------*/
+
+                //截取两个 / 符号之间的字符串
+                needReplaceString = txt.Substring(newLineIndex + 1, sIndex2 - newLineIndex - 1);
+            }
+
+            //将需要替换的文本都替换为空格。相当于删除掉。只保留后面的文件名 vKOnx78R3460000.ts
+            var newText = txt.Replace(needReplaceString, "");
+
+            //将替换好的新清单文本写入新文件
+            var newFile = string.Format("{0}\\{1}_new.m3u8", Path.GetDirectoryName(oldFile), Path.GetFileNameWithoutExtension(oldFile));
+            File.WriteAllText(newFile, newText);
+            return newFile;
+        }
+
+        private int getCountOfString(string sourceText, string searchText)
+        {
+            var count = 0;
+            var lastIndex = 0;
+            while ((lastIndex = sourceText.IndexOf(searchText, lastIndex)) != -1)
+            {
+                lastIndex++;
+                count++;
+            }
+            return count;
+        }
+
         private void btnPauseAll_Click(object sender, EventArgs e)
         {
             if (mAria2c == null)

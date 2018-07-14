@@ -397,7 +397,7 @@
             this.txbMergeCMD.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txbMergeCMD.Size = new System.Drawing.Size(454, 21);
             this.txbMergeCMD.TabIndex = 0;
-            this.txbMergeCMD.Text = "{ffmpeg} -threads 1 -i {列表.m3u8} -c copy {文件名}.mkv";
+            this.txbMergeCMD.Text = "\"{ffmpeg}\" -threads 1 -i \"{列表.m3u8}\" -c copy \"{文件名}.mkv\"";
             // 
             // groupBox4
             // 
