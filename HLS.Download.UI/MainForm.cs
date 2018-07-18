@@ -67,6 +67,7 @@ namespace HLS.Download.UI
                     btnStartAria2_Click(btnStartAria2, null);
 
                 mUrlAndNameMap.Clear();
+                mUrlAndDownloadDirMap.Clear();
                 mPidAndUrlMap.Clear();
 
                 var downloadDir = Aria2cRuntime.DownLoadDirectory;
