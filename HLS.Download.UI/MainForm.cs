@@ -633,6 +633,8 @@ namespace HLS.Download.UI
                  *--------------------------------------------------*/
                 return oldFile;
 
+            var needReplaceString = "";
+
             //找到 这个符号 之后的 .ts 
             var tsIndex = txt.IndexOf(".ts", sIndex1);
 
@@ -646,36 +648,36 @@ namespace HLS.Download.UI
                  * #EXTINF:4.56,
                  * /vKOnx78R3460000.ts
                  *---------------------------------------------------*/
-                return oldFile;
-
-            //查找第一个 分隔符 左边的换行符
-            var newLineIndex = txt.LastIndexOf("\n", sIndex1);
-
-            //假如 左边的换行符 和 分隔符位置一致时
-            var needReplaceString = "";
-            if (newLineIndex == sIndex1)
-            {
-                /*--------------------------------------------------
-                 * 情况2：
-                 * #EXTINF:4.56,
-                 * /20180303/E1okxWlJ/800kb/hls/vKOnx78R3460000.ts
-                 *---------------------------------------------------*/
-
-                //截取两个 / 符号之间的字符串
-                needReplaceString = txt.Substring(sIndex1, sIndex2 - sIndex1);
-            }
+                needReplaceString = "/";
             else
             {
-                /*--------------------------------------------------
-                 * 情况3：
-                 * #EXTINF:4.56,
-                 * http://a.b.c/d/vKOnx78R3460000.ts
-                 *---------------------------------------------------*/
+                //查找第一个 分隔符 左边的换行符
+                var newLineIndex = txt.LastIndexOf("\n", sIndex1);
 
-                //截取两个 / 符号之间的字符串
-                needReplaceString = txt.Substring(newLineIndex + 1, sIndex2 - newLineIndex - 1);
+                //假如 左边的换行符 和 分隔符位置一致时
+                if (newLineIndex == sIndex1)
+                {
+                    /*--------------------------------------------------
+                     * 情况2：
+                     * #EXTINF:4.56,
+                     * /20180303/E1okxWlJ/800kb/hls/vKOnx78R3460000.ts
+                     *---------------------------------------------------*/
+
+                    //截取两个 / 符号之间的字符串
+                    needReplaceString = txt.Substring(sIndex1, sIndex2 - sIndex1 + 1/*+1目的是把/符号去掉！*/);
+                }
+                else
+                {
+                    /*--------------------------------------------------
+                     * 情况3：
+                     * #EXTINF:4.56,
+                     * http://a.b.c/d/vKOnx78R3460000.ts
+                     *---------------------------------------------------*/
+
+                    //截取两个 / 符号之间的字符串
+                    needReplaceString = txt.Substring(newLineIndex + 1/*+1目的是跳过换行符*/, sIndex2 - (newLineIndex + 1) + 1/*+1目的是把/符号去掉！*/);
+                }
             }
-
             //将需要替换的文本都替换为空格。相当于删除掉。只保留后面的文件名 vKOnx78R3460000.ts
             var newText = txt.Replace(needReplaceString, "");
 
