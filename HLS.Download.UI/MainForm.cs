@@ -486,6 +486,10 @@ namespace HLS.Download.UI
 
         private void btnMerge_Click(object sender, EventArgs e)
         {
+            //防止没启动Aria2 获取不到正确的下载目录
+            if (mAria2c == null)
+                btnStartAria2_Click(btnStartAria2, null);
+
             ((Button)sender).Enabled = false;
             Cursor.Current = Cursors.WaitCursor;
             var TAG = "合并";
