@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.cbbUserAgent = new System.Windows.Forms.ComboBox();
@@ -255,7 +256,7 @@
             this.txbLog.Multiline = true;
             this.txbLog.Name = "txbLog";
             this.txbLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txbLog.Size = new System.Drawing.Size(432, 525);
+            this.txbLog.Size = new System.Drawing.Size(432, 571);
             this.txbLog.TabIndex = 1;
             // 
             // groupBox2
@@ -362,7 +363,7 @@
             this.groupBox3.Controls.Add(this.txbMergeCMD);
             this.groupBox3.Location = new System.Drawing.Point(12, 325);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(516, 233);
+            this.groupBox3.Size = new System.Drawing.Size(516, 279);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "合并控制台:";
@@ -381,7 +382,7 @@
             // 
             this.btnMerge.Location = new System.Drawing.Point(465, 116);
             this.btnMerge.Name = "btnMerge";
-            this.btnMerge.Size = new System.Drawing.Size(43, 108);
+            this.btnMerge.Size = new System.Drawing.Size(43, 154);
             this.btnMerge.TabIndex = 1;
             this.btnMerge.Text = "手工合并";
             this.btnMerge.UseVisualStyleBackColor = true;
@@ -396,11 +397,9 @@
             this.txbMergeCMD.Multiline = true;
             this.txbMergeCMD.Name = "txbMergeCMD";
             this.txbMergeCMD.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txbMergeCMD.Size = new System.Drawing.Size(454, 108);
+            this.txbMergeCMD.Size = new System.Drawing.Size(454, 154);
             this.txbMergeCMD.TabIndex = 0;
-            this.txbMergeCMD.Text = "@ECHO OFF\r\nPUSHD %~dp0\r\n\r\n\"{ffmpeg}\" -report -loglevel +level+warning -threads 1 " +
-    "-i \"{本地TS列表.m3u8}\" -c copy \"{文件名}.mkv\"\r\n\r\nECHO.\r\nECHO 运行退出码ExitCode=%ERRORLEVEL%" +
-    "\r\nPAUSE";
+            this.txbMergeCMD.Text = resources.GetString("txbMergeCMD.Text");
             // 
             // groupBox4
             // 
@@ -410,7 +409,7 @@
             this.groupBox4.Controls.Add(this.txbLog);
             this.groupBox4.Location = new System.Drawing.Point(534, 12);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(446, 546);
+            this.groupBox4.Size = new System.Drawing.Size(446, 592);
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "日志信息:";
@@ -419,7 +418,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(992, 567);
+            this.ClientSize = new System.Drawing.Size(992, 613);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);

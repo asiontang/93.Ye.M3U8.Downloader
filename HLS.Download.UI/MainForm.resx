@@ -204,6 +204,21 @@
   <metadata name="txbMergeCMD.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <data name="txbMergeCMD.Text" xml:space="preserve">
+    <value>@ECHO OFF
+PUSHD %~dp0
+
+SET FCMD="{ffmpeg}" -report -loglevel +level+warning -threads 1 -i "{本地TS列表.m3u8}" -c copy "..\{文件名}.mkv"
+ECHO %FCMD%
+%FCMD%
+
+ECHO.
+DIR "..\{文件名}.mkv"
+
+ECHO.
+ECHO 运行退出码ExitCode=%ERRORLEVEL%
+PAUSE</value>
+  </data>
   <metadata name="groupBox4.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
