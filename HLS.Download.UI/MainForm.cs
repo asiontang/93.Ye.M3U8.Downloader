@@ -548,6 +548,14 @@ namespace HLS.Download.UI
                     //先从 m3u8 文件里提取出 ts 文件列表。
                     foreach (var m3u8File in m3u8List)
                     {
+                        //忽略自己生成的新清单文件
+                        if (m3u8File.ToLower().EndsWith("_new.m3u8"))
+                        {
+                            WriteLog(TAG, string.Format("子目录{0}：分析{1}文件结果：此文件是本程序临时生成的TS清单文件，跳过！"
+                                , dirName, Path.GetFileName(m3u8File)));
+                            continue;
+                        }
+
                         WriteLog(TAG, string.Format("子目录{0}：分析{1}文件中", dirName, Path.GetFileName(m3u8File)));
                         var txt = File.ReadAllText(m3u8File);
 
