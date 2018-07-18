@@ -59,6 +59,7 @@ namespace HLS.Download.UI
             ((Button)sender).Enabled = false;
             Cursor.Current = Cursors.WaitCursor;
             var TAG = "下载";
+            WriteLog(null, Environment.NewLine);
             WriteLog(TAG, "执行中");
             try
             {
@@ -135,6 +136,7 @@ namespace HLS.Download.UI
             ((Button)sender).Enabled = false;
             Cursor.Current = Cursors.WaitCursor;
             var TAG = "启动Aria2";
+            WriteLog(null, Environment.NewLine);
             WriteLog(TAG, "执行中");
             try
             {
@@ -381,6 +383,7 @@ namespace HLS.Download.UI
             ((Button)sender).Enabled = false;
             Cursor.Current = Cursors.WaitCursor;
             var TAG = "杀掉所有Aria2进程";
+            WriteLog(null, Environment.NewLine);
             WriteLog(TAG, "执行中");
             try
             {
@@ -437,14 +440,24 @@ namespace HLS.Download.UI
                 return;
             }
 #if DEBUG
-            Debug.Write(tag);
-            Debug.Write("：");
-            Debug.WriteLine(info);
+            if (tag == null)
+                Debug.WriteLine(info);
+            else
+            {
+                Debug.Write(tag);
+                Debug.Write("：");
+                Debug.WriteLine(info);
+            }
 #endif
-            txbLog.AppendText(tag);
-            txbLog.AppendText("：");
-            txbLog.AppendText(info);
-            txbLog.AppendText(Environment.NewLine);
+            if (tag == null)
+                txbLog.AppendText(info);
+            else
+            {
+                txbLog.AppendText(tag);
+                txbLog.AppendText("：");
+                txbLog.AppendText(info);
+                txbLog.AppendText(Environment.NewLine);
+            }
         }
 
         private void btnOpenDownloadDir_Click(object sender, EventArgs e)
@@ -460,6 +473,7 @@ namespace HLS.Download.UI
             {
                 if (mAria2c != null)
                     Aria2cRuntime.DownLoadDirectory = folderBrowserDialog1.SelectedPath;
+                WriteLog(null, Environment.NewLine);
                 WriteLog("设置全局下载目录", folderBrowserDialog1.SelectedPath);
             }
         }
@@ -495,6 +509,7 @@ namespace HLS.Download.UI
             ((Button)sender).Enabled = false;
             Cursor.Current = Cursors.WaitCursor;
             var TAG = "合并";
+            WriteLog(null, Environment.NewLine);
             WriteLog(TAG, "执行中");
             try
             {
@@ -717,6 +732,7 @@ namespace HLS.Download.UI
 
             var result = mAria2c.ForcePauseAll();
             var TAG = "全部暂停下载";
+            WriteLog(null, Environment.NewLine);
             WriteLog(TAG, "执行完毕");
             WriteLog(TAG, "执行结果=" + result);
         }
@@ -728,6 +744,7 @@ namespace HLS.Download.UI
 
             var result = mAria2c.UnPauseAll();
             var TAG = "全部启动下载";
+            WriteLog(null, Environment.NewLine);
             WriteLog(TAG, "执行完毕");
             WriteLog(TAG, "执行结果=" + result);
         }
@@ -735,6 +752,41 @@ namespace HLS.Download.UI
         private void cbbUserAgent_SelectedIndexChanged(object sender, EventArgs e)
         {
             mSelectedUserAgent = cbbUserAgent.Text;
+        }
+
+        private void btnDelSession_Click(object sender, EventArgs e)
+        {
+            ((Button)sender).Enabled = false;
+            Cursor.Current = Cursors.WaitCursor;
+            var TAG = "清空Aria2下载记录";
+            WriteLog(null, Environment.NewLine);
+            WriteLog(TAG, "执行中");
+            try
+            {
+                var path = Path.Combine(Environment.CurrentDirectory, "Aria2\\aria2c.session");
+                var bakPath = path + "." + DateTime.Now.ToString("yyyyMMddHHmmss") + ".bak";
+
+                WriteLog(TAG, string.Format("备份文件={0}", bakPath));
+                File.Copy(path, bakPath);
+
+                WriteLog(TAG, string.Format("删除文件={0}", path));
+                File.Delete(path);
+
+                WriteLog(TAG, string.Format("新建空文件={0}", path));
+                File.WriteAllText(path, "");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                WriteLog(TAG, "出现未知异常");
+                WriteLog(TAG, ex.ToString());
+            }
+            finally
+            {
+                ((Button)sender).Enabled = true;
+
+                Cursor.Current = Cursors.Default;
+            }
         }
     }
 }

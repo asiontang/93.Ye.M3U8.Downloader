@@ -61,6 +61,7 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnDelSession = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -261,6 +262,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.btnDelSession);
             this.groupBox2.Controls.Add(this.txbAria2GlobalInfo);
             this.groupBox2.Controls.Add(this.btnUnPauseAll);
             this.groupBox2.Controls.Add(this.btnPauseAll);
@@ -414,6 +416,17 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "日志信息:";
             // 
+            // btnDelSession
+            // 
+            this.btnDelSession.Location = new System.Drawing.Point(210, 58);
+            this.btnDelSession.Name = "btnDelSession";
+            this.btnDelSession.Size = new System.Drawing.Size(96, 36);
+            this.btnDelSession.TabIndex = 8;
+            this.btnDelSession.Text = "清空下载记录";
+            this.toolTip1.SetToolTip(this.btnDelSession, "删除 aria2c.session文件");
+            this.btnDelSession.UseVisualStyleBackColor = true;
+            this.btnDelSession.Click += new System.EventHandler(this.btnDelSession_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -474,6 +487,7 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.ComboBox cbbUserAgent;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnDelSession;
     }
 }
 
