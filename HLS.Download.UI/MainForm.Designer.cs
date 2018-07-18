@@ -255,7 +255,7 @@
             this.txbLog.Multiline = true;
             this.txbLog.Name = "txbLog";
             this.txbLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txbLog.Size = new System.Drawing.Size(385, 488);
+            this.txbLog.Size = new System.Drawing.Size(432, 525);
             this.txbLog.TabIndex = 1;
             // 
             // groupBox2
@@ -360,9 +360,9 @@
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.btnMerge);
             this.groupBox3.Controls.Add(this.txbMergeCMD);
-            this.groupBox3.Location = new System.Drawing.Point(12, 400);
+            this.groupBox3.Location = new System.Drawing.Point(12, 325);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(516, 121);
+            this.groupBox3.Size = new System.Drawing.Size(516, 233);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "合并控制台:";
@@ -372,16 +372,16 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(6, 17);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(251, 72);
+            this.label5.Size = new System.Drawing.Size(251, 96);
             this.label5.TabIndex = 3;
-            this.label5.Text = "{ffmpeg}\r\n    会自动替换为本程序目录下的exe所在路径\r\n{列表.m3u8}\r\n    会自动替换为本地路径的切片列表文件\r\n{文件名}\r\n    " +
-    "会自动替换为下载时设置的值";
+            this.label5.Text = "{ffmpeg}\r\n    会自动替换为本程序目录下的exe所在路径\r\n\r\n{本地TS列表.m3u8}\r\n    会自动替换为本地路径的切片列表文件\r\n\r\n{文件" +
+    "名}\r\n    会自动替换为下载时设置的值";
             // 
             // btnMerge
             // 
-            this.btnMerge.Location = new System.Drawing.Point(465, 17);
+            this.btnMerge.Location = new System.Drawing.Point(465, 116);
             this.btnMerge.Name = "btnMerge";
-            this.btnMerge.Size = new System.Drawing.Size(43, 95);
+            this.btnMerge.Size = new System.Drawing.Size(43, 108);
             this.btnMerge.TabIndex = 1;
             this.btnMerge.Text = "手工合并";
             this.btnMerge.UseVisualStyleBackColor = true;
@@ -392,12 +392,15 @@
             this.txbMergeCMD.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txbMergeCMD.Location = new System.Drawing.Point(6, 92);
+            this.txbMergeCMD.Location = new System.Drawing.Point(5, 116);
+            this.txbMergeCMD.Multiline = true;
             this.txbMergeCMD.Name = "txbMergeCMD";
             this.txbMergeCMD.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txbMergeCMD.Size = new System.Drawing.Size(454, 21);
+            this.txbMergeCMD.Size = new System.Drawing.Size(454, 108);
             this.txbMergeCMD.TabIndex = 0;
-            this.txbMergeCMD.Text = "\"{ffmpeg}\" -threads 1 -i \"{列表.m3u8}\" -c copy \"{文件名}.mkv\"";
+            this.txbMergeCMD.Text = "@ECHO OFF\r\nPUSHD %~dp0\r\n\r\n\"{ffmpeg}\" -report -loglevel +level+warning -threads 1 " +
+    "-i \"{本地TS列表.m3u8}\" -c copy \"{文件名}.mkv\"\r\n\r\nECHO.\r\nECHO 运行退出码ExitCode=%ERRORLEVEL%" +
+    "\r\nPAUSE";
             // 
             // groupBox4
             // 
@@ -407,7 +410,7 @@
             this.groupBox4.Controls.Add(this.txbLog);
             this.groupBox4.Location = new System.Drawing.Point(534, 12);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(399, 509);
+            this.groupBox4.Size = new System.Drawing.Size(446, 546);
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "日志信息:";
@@ -416,7 +419,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(945, 530);
+            this.ClientSize = new System.Drawing.Size(992, 567);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace HLS.Download.UI
@@ -592,16 +593,25 @@ namespace HLS.Download.UI
                         //改造此清单文件形成本地可用的新清单文件
                         var newM3U8File = getNewM3U8File(txt, m3u8File);
 
-                        //拼接最终执行的命令
+                        //拼接最终执行的命令行脚本
                         {
-                            //{ffmpeg} -threads 1 -i {列表.m3u8} -c copy {文件名}.mkv
+                            var cmdPath = string.Format("{0}\\{1}.bat", Path.GetDirectoryName(newM3U8File), Path.GetFileNameWithoutExtension(newM3U8File));
+
+                            WriteLog(TAG, string.Format("子目录{0}：分析{1}文件结果：生成批处理脚本中={2}"
+                                , dirName, Path.GetFileName(m3u8File), Path.GetFileName(cmdPath)));
+
+                            //{ffmpeg} -threads 1 -i {本地TS列表.m3u8} -c copy {文件名}.mkv
                             var cmd = txbMergeCMD.Text;
                             cmd = cmd.Replace("{ffmpeg}", ffmpegPath);
-                            cmd = cmd.Replace("{列表.m3u8}", newM3U8File);
+                            cmd = cmd.Replace("{本地TS列表.m3u8}", newM3U8File);
                             cmd = cmd.Replace("{文件名}", dirName);
 
-                            WriteLog(TAG, string.Format("子目录{0}：分析{1}文件结果：尝试执行命令{2}{3}"
-                                , dirName, Path.GetFileName(m3u8File), Environment.NewLine, cmd));
+                            File.WriteAllText(cmdPath, cmd, Encoding.Default);
+
+                            WriteLog(TAG, string.Format("子目录{0}：分析{1}文件结果：执行批处理脚本中={2}"
+                                , dirName, Path.GetFileName(m3u8File), Path.GetFileName(cmdPath)));
+
+                            Process.Start(cmdPath);
                         }
                     }
                 }
