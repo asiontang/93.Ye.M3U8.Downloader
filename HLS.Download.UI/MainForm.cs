@@ -418,12 +418,15 @@ namespace HLS.Download.UI
 
         private void btnOpenAria2WebUI_Click(object sender, EventArgs e)
         {
-            //以下两个WebUI是一样的。只是语言不同，且都不够强大。
-            //中文：http://aria2c.com/
-            //原版：http://binux.github.io/yaaw/demo/
+            //1.以下两个WebUI是一样的。只是语言不同，且都不够强大。
+            //  中文：http://aria2c.com/
+            //  原版：http://binux.github.io/yaaw/demo/
 
-            //更强大的UI，支持查看和设置各种选项。
-            Process.Start("http://ariang.mayswind.net/latest/");
+            //2.更强大的UI，支持查看和设置各种选项。 #!/settings/rpc/set?protocol=http&host=127.0.0.1&port=6800&interface=jsonrpc
+            //  http://ariang.mayswind.net/latest/"
+
+            //3.更强大的UI,支持过滤各种状态的任务,方便重新下载失败的任务.
+            Process.Start("https://ziahamza.github.io/webui-aria2/");
         }
 
         private void WriteLog(String tag, String info)
