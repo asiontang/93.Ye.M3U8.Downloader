@@ -29,6 +29,7 @@ namespace HLS.Download.UI
     //？ff 解压后的路径 怎么设置工作目录？否则无法识别！！
     //？或者清单文件里直接设置 ts 文件的绝对路径？ 导出文件也设置为绝对路径！
     //？需要去掉 / 符号！！！本地路径才识别。或者换为\符号？
+    //？可以使用COPY /B *.ts name.mp4 来解决无法通过 ffmpeg 合并的视频文件。如提示 Timestamps are unset in a packet for stream 0
     public partial class MainForm : Form
     {
         private Aria2c mAria2c;
