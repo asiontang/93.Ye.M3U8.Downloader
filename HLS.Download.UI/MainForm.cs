@@ -426,7 +426,9 @@ namespace HLS.Download.UI
             //  http://ariang.mayswind.net/latest/"
 
             //3.更强大的UI,支持过滤各种状态的任务,方便重新下载失败的任务.
-            Process.Start("https://ziahamza.github.io/webui-aria2/");
+            //  原版地址：https://ziahamza.github.io/webui-aria2/
+            //  将其替换为国内的地址，并且修改为默认localhost模式，方便第一次使用。
+            Process.Start("https://asiontang.gitee.io/webui-aria2/");
         }
 
         private void WriteLog(String tag, String info)
