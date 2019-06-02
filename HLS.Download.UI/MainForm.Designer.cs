@@ -46,6 +46,7 @@
             this.rdbSelectBandWidthMax = new System.Windows.Forms.RadioButton();
             this.txbLog = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnDelSession = new System.Windows.Forms.Button();
             this.txbAria2GlobalInfo = new System.Windows.Forms.TextBox();
             this.btnUnPauseAll = new System.Windows.Forms.Button();
             this.btnPauseAll = new System.Windows.Forms.Button();
@@ -61,7 +62,6 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.btnDelSession = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -278,6 +278,17 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Aria2控制台:";
             // 
+            // btnDelSession
+            // 
+            this.btnDelSession.Location = new System.Drawing.Point(210, 58);
+            this.btnDelSession.Name = "btnDelSession";
+            this.btnDelSession.Size = new System.Drawing.Size(96, 36);
+            this.btnDelSession.TabIndex = 8;
+            this.btnDelSession.Text = "清空下载记录";
+            this.toolTip1.SetToolTip(this.btnDelSession, "删除 aria2c.session文件");
+            this.btnDelSession.UseVisualStyleBackColor = true;
+            this.btnDelSession.Click += new System.EventHandler(this.btnDelSession_Click);
+            // 
             // txbAria2GlobalInfo
             // 
             this.txbAria2GlobalInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -416,17 +427,6 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "日志信息:";
             // 
-            // btnDelSession
-            // 
-            this.btnDelSession.Location = new System.Drawing.Point(210, 58);
-            this.btnDelSession.Name = "btnDelSession";
-            this.btnDelSession.Size = new System.Drawing.Size(96, 36);
-            this.btnDelSession.TabIndex = 8;
-            this.btnDelSession.Text = "清空下载记录";
-            this.toolTip1.SetToolTip(this.btnDelSession, "删除 aria2c.session文件");
-            this.btnDelSession.UseVisualStyleBackColor = true;
-            this.btnDelSession.Click += new System.EventHandler(this.btnDelSession_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -437,6 +437,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "MainForm";
+            this.Text = "Ye.M3U8.Downloader [By:AsionTang] [v190603.01.60.060]";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
