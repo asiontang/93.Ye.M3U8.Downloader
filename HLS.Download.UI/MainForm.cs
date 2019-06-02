@@ -559,6 +559,16 @@ namespace HLS.Download.UI
                 foreach (var dir in dirs)
                 {
                     var dirName = Path.GetFileName(dir);
+
+                    //检测是否已经合并过。
+                    var flag = Path.Combine(dir, "!YeHadMerge");
+                    if (Directory.Exists(flag))
+                    {
+                        WriteLog(TAG, string.Format("已经手工合并过，跳过！子目录：{0}", dirName));
+                        continue;
+                    }
+                    Directory.CreateDirectory(flag);
+
                     WriteLog(TAG, string.Format("子目录{0}：检测是否包含.M3U8文件中", dirName));
 
                     //获取目录中所有文件
