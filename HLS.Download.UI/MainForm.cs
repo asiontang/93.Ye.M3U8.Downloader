@@ -372,6 +372,14 @@ namespace HLS.Download.UI
                         var url = new Uri(baseUri, p.Path).AbsoluteUri;
                         mAria2c.AddUri(url, "", dir, mSelectedUserAgent);
                     }
+
+                    if (r.Key != null && r.Key.Path.Length > 0)
+                    {
+                        WriteLog(TAG, String.Format("需下载的视频解密KEY={0}", r.Key.Path));
+                        var url = new Uri(baseUri, r.Key.Path.Replace("\"", "")).AbsoluteUri;
+                        mAria2c.AddUri(url, "", dir, mSelectedUserAgent);
+                    }
+
                     WriteLog(TAG, String.Format("Aria2正在下载中"));
                 }
             }
