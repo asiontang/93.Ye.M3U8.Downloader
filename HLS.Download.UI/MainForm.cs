@@ -88,6 +88,10 @@ namespace HLS.Download.UI
                     var dir = Path.Combine(downloadDir, name);//使用文件名作为新目录来临时存储多个切片。
                     Directory.CreateDirectory(dir);
 
+                    //将从网页JSON里提取出来的带转义的网址也能保证正确识别。
+                    //http:\/\/x.x.com\/x\/x\/index.m3u8
+                    url = url.Replace("\\", "");
+
                     urls.Add(url);
                     mUrlAndNameMap.Add(url, name);
                     mUrlAndDownloadDirMap.Add(url, dir);
