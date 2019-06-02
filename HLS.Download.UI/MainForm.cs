@@ -354,6 +354,12 @@ namespace HLS.Download.UI
 
                     WriteLog(TAG, String.Format("下载指定码率={0},分辨率={1}", nextPlaylist.BANDWIDTH, nextPlaylist.RESOLUTION));
                     WriteLog(TAG, "下载指定码率:路径=" + nextPlaylist.URI);
+
+                    //当下载了 index.m3u8 后指向了具体码率的 4405kb/hls/index.m3u8 此时因为文件名都是一样的，导致有BUG，会忽略下载。
+                    if (Path.GetFileName(baseUri.AbsoluteUri) == Path.GetFileName(nextPlaylist.URI))
+                        //于是将老的文件名重命名即可。
+                        File.Move(file.Path, file.Path + ".old.m3u8");
+
                     var url = new Uri(baseUri, nextPlaylist.URI).AbsoluteUri;
                     var gid = mAria2c.AddUri(url, "", dir, mSelectedUserAgent);
                     WriteLog(TAG, string.Format("下载指定码率:任务ID={0}", gid));
@@ -366,6 +372,7 @@ namespace HLS.Download.UI
                         var url = new Uri(baseUri, p.Path).AbsoluteUri;
                         mAria2c.AddUri(url, "", dir, mSelectedUserAgent);
                     }
+                    WriteLog(TAG, String.Format("Aria2正在下载中"));
                 }
             }
             catch (Exception ex)
